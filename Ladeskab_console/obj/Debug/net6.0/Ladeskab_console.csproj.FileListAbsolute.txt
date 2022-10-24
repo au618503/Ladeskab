@@ -1,0 +1,5 @@
+C:\SW4\SWT\Assignment_2\Ladeskab\Ladeskab_console\obj\Debug\net6.0\Ladeskab_console.csproj.AssemblyReference.cache
+C:\SW4\SWT\Assignment_2\Ladeskab\Ladeskab_console\obj\Debug\net6.0\Ladeskab_console.GeneratedMSBuildEditorConfig.editorconfig
+C:\SW4\SWT\Assignment_2\Ladeskab\Ladeskab_console\obj\Debug\net6.0\Ladeskab_console.AssemblyInfoInputs.cache
+C:\SW4\SWT\Assignment_2\Ladeskab\Ladeskab_console\obj\Debug\net6.0\Ladeskab_console.AssemblyInfo.cs
+C:\SW4\SWT\Assignment_2\Ladeskab\Ladeskab_console\obj\Debug\net6.0\Ladeskab_console.csproj.CoreCompileInputs.cache
