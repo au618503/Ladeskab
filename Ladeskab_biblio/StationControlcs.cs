@@ -44,7 +44,7 @@ namespace Ladeskab
             _charger.CurrentValueEvent += HandleChargeCurrent;
 
             _rfid = rfid;
-            _rfid.RfidEvent += RfidDetected;
+            _rfid.RfidEvent += HandleRfidDetected;
         }
 
         private void HandleDoor(object sender, DoorEventArgs e)
@@ -74,8 +74,14 @@ namespace Ladeskab
         private void HandleChargeCurrent(object sender, CurrentEventArgs e)
         {
         }
+
+        private void HandleRfidDetected(object sender, RfidEventArgs e)
+        {
+            RfidDetected(e.Rfid);
+        }
+
         // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
-        
+
         private void RfidDetected(int id)
         {
             switch (_state)
