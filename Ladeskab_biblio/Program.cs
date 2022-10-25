@@ -1,6 +1,6 @@
 ﻿using Ladeskab;
+using Ladeskab_biblio.ChargeControl;
 using System;
-using UsbSimulator;
 
 class Program
 {

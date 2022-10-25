@@ -5,54 +5,46 @@ namespace Ladeskab_biblio.ChargeControl
 {
     public class ChargeControl
     {
-        public class StateChangedEventArgs : EventArgs
+        /* Controls charging via State pattern
+         * StateCharging and StateFullyCharged run a non blocking method, which poll charger
+         * interface, and act according to the specifications
+        */
+
+        // Can add error message if more errors are introduced
+        public class ChargingEventArgs : EventArgs
         {
-            public ChargeState State;
+            public StateID Id { get; set; }
+            public string? Message { get; set; }
         }
 
         IUsbCharger _charger;
-        ChargeState _chargeState;
-        StateBase _state;
-        public event EventHandler<StateChangedEventArgs> StateChanged;
-        // Use these values to monitor the charging
-        const double ThresholdMin = 5;
-        const double ThresholdMax = 500;
-        private double _lastLoggedCurrent;
-        public ChargeControl(IUsbCharger charger)
+        private StateBase _state;
+        public event EventHandler<ChargingEventArgs> ChargingStateChanged;
+        
+        // Subscribe to state change events in the constructor
+        public ChargeControl(IUsbCharger charger, EventHandler<ChargingEventArgs> handler)
         {
             _charger = charger;
+            var defaultState = new StateReady(_charger, this);
+            ChargingStateChanged += handler;
+            ChangeState(defaultState);
         }
 
-        // Check if device is connected to the charger and return status
-        public bool DeviceConnected()
+        public void StartCharge()
         {
-            return _charger.Connected;
+            ChangeState(new StateCharging(_charger, this));
         }
 
-        double GetCurrentLevel()
+        public void StopCharge()
         {
-            return _charger.CurrentValue;
+            _state.StopCharge();
         }
-
-        void MonitorCurrentLevel()
+        // All logic delegated to states via GoF State pattern
+        public void ChangeState(StateBase state)
         {
-            double level = GetCurrentLevel();
-            if (level > ThresholdMax)
-            {
-                // ERROR! STOP CHARGING IMMEDIATILY!
-                _charger.StopCharge();
-                _chargeState = ChargeState.ERROR;
-                OnChargeStateChange();
-            }
-            else if (level == 0)
-            {
-                _chargeState = 
-            }
-        }
-
-        void OnChargeStateChange()
-        {
-            StateChanged.Invoke(this, new StateChangedEventArgs(){State = _chargeState});
+            _state = state;
+            ChargingStateChanged.Invoke(this, new ChargingEventArgs()
+                { Id = _state.StateId , Message = _state.DisplayMessage});
         }
     }
 }

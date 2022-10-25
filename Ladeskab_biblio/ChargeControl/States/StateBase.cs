@@ -2,14 +2,30 @@
 
 public class StateBase
 {
-    protected IUsbCharger _charger;
-    public StateBase(IUsbCharger charger)
+    public readonly StateID StateId;
+    public string DisplayMessage { get; set; }
+    protected IUsbCharger Charger;
+    protected ChargeControl Context;
+    protected const double ThresholdError = 500;
+    protected const double ThresholdCharging = 5;
+    protected bool Charging = true;
+    public StateBase(IUsbCharger charger, ChargeControl context, StateID stateId)
     {
-        _charger = charger;
+        Charger = charger;
+        Context = context;
+        StateId = stateId;
     }
 
     public virtual void MonitorCurrentLevel()
     {
-
+       
     }
+
+    public void StopCharge()
+    {
+        Charger.StopCharge();
+        // Makes sure if a task is running, it is stopped
+        Charging = false;
+    }
+    public virtual void OnEnter(){}
 }

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UsbSimulator;
+using Ladeskab_biblio.ChargeControl;
 
 //using Ladeskab.Interfaces;
 
@@ -29,6 +29,7 @@ namespace Ladeskab
         private IDoor _door;
         private Display _display;
         private IRfid _rfid;
+        private ChargeControl _chargeControl;
 
         private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
@@ -41,12 +42,18 @@ namespace Ladeskab
             _door.DoorEvent += HandleDoor;
 
             _charger = charger;
-            _charger.CurrentValueEvent += HandleChargeCurrent;
+            //_charger.CurrentValueEvent += HandleChargeCurrent;
 
             _rfid = rfid;
-            _rfid.RfidEvent += RfidDetected;
+            //_rfid.RfidEvent += RfidDetected;
+            _chargeControl = new ChargeControl(_charger, OnChargingStateChanged);
+            _chargeControl.StartCharge();
         }
 
+        public void OnChargingStateChanged(object? sender, ChargeControl.ChargingEventArgs args)
+        {
+            Console.WriteLine("Charging state changed: " + args.Id + "\nDisplay message: " + args.Message);
+        }
         private void HandleDoor(object sender, DoorEventArgs e)
         {
             switch (_state)

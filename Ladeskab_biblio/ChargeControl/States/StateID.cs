@@ -1,8 +1,8 @@
 ﻿namespace Ladeskab_biblio.ChargeControl.States;
 
-public enum ChargeState
+public enum StateID
 {
-    NO_DEVICE,
+    READY,
     FULLY_CHARGED,
     CHARGING,
     ERROR
