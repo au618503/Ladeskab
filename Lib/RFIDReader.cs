@@ -26,7 +26,7 @@ namespace Cabinet_Library
         }
         private void OnNewRfidStatus()
         {
-            RfidEvent?.Invoke(this, new RfidEventArgs() {  = RfidRead });
+            RfidEvent?.Invoke(this, new RfidEventArgs() { Rfid = RfidRead });
         }
     }
 
