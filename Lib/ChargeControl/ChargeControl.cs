@@ -4,7 +4,7 @@ using Cabinet_Library.ObserverPattern;
 
 namespace Cabinet_Library.ChargeControl
 {
-    public class ChargeControl
+    public class ChargeControl : IChargeControl
     {
         #region Publisher
         /*
@@ -44,6 +44,11 @@ namespace Cabinet_Library.ChargeControl
             _display = display;
             var defaultState = new StateReady(_charger, this);
             ChangeState(defaultState);
+        }
+
+        public bool DeviceConnected()
+        {
+            return _charger.Connected;
         }
 
         // Monitoring logic delegated to states via GoF State pattern
