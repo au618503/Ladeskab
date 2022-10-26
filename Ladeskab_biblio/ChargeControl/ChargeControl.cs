@@ -1,10 +1,24 @@
 ﻿using Ladeskab_biblio.ChargeControl.States;
+using Ladeskab_biblio.ObserverPattern;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace Ladeskab_biblio.ChargeControl
 {
-    public class ChargeControl
+    public class ChargeControl : IPublisher<ChargeControl.ChargingEventArgs>
     {
+        #region Publisher
+
+        public void AddListener(IObserver observer, EventHandler<ChargingEventArgs> callback)
+        {
+            ChargingStateChanged += callback;
+        }
+
+        public void RemoveListener(EventHandler<ChargingEventArgs> callback)
+        {
+            ChargingStateChanged -= callback;
+        }
+        #endregion
+
         /* Controls charging via State pattern
          * StateCharging and StateFullyCharged run a non blocking method, which poll charger
          * interface, and act according to the specifications
@@ -21,12 +35,10 @@ namespace Ladeskab_biblio.ChargeControl
         private StateBase _state;
         public event EventHandler<ChargingEventArgs> ChargingStateChanged;
         
-        // Subscribe to state change events in the constructor
-        public ChargeControl(IUsbCharger charger, EventHandler<ChargingEventArgs> handler)
+        public ChargeControl(IUsbCharger charger)
         {
             _charger = charger;
             var defaultState = new StateReady(_charger, this);
-            ChargingStateChanged += handler;
             ChangeState(defaultState);
         }
 

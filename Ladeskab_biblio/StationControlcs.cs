@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ladeskab_biblio.ChargeControl;
+using Ladeskab_biblio.Display;
 
 //using Ladeskab.Interfaces;
 
@@ -46,8 +47,9 @@ namespace Ladeskab
 
             _rfid = rfid;
             //_rfid.RfidEvent += RfidDetected;
-            _chargeControl = new ChargeControl(_charger, OnChargingStateChanged);
-            _chargeControl.StartCharge();
+            /* TEST CHARGE CONTROL
+             *_chargeControl = new ChargeControl(_charger, OnChargingStateChanged);
+            _chargeControl.StartCharge();*/
         }
 
         public void OnChargingStateChanged(object? sender, ChargeControl.ChargingEventArgs args)

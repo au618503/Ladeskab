@@ -1,5 +1,5 @@
 ﻿using System;
-using UsbSimulator;
+using Ladeskab_biblio.ChargeControl;
 
 namespace Ladeskab
 {

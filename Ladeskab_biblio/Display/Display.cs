@@ -1,5 +1,6 @@
 ﻿using System;
-namespace Ladeskab
+
+namespace Ladeskab_biblio.Display
 {
     public class Display
     {
