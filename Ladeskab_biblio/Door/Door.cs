@@ -31,7 +31,7 @@ namespace Ladeskab_biblio.Door
             DoorIsOpen = false;
             DoorIsLocked = false;
         }
-        public event EventHandler<DoorEventArgs> DoorEvent;
+        public event EventHandler<DoorEventArgs>? DoorEvent;
         public bool DoorIsOpen { get; private set; }
         public bool DoorIsLocked { get; private set; }
 

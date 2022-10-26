@@ -2,6 +2,9 @@
 using Ladeskab_biblio.Door;
 using System;
 using UsbChargerSimulator;
+using NUnit.Framework;
+using NSubstitute;
+using Ladeskab_biblio.ChargeControl;
 
 
 

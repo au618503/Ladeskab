@@ -31,7 +31,7 @@ namespace Ladeskab
         private IDoor _door;
         private Display _display;
         private IRfid _rfid;
-        private ChargeControl _chargeControl;
+        private ChargeControl?_chargeControl;
 
         private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
@@ -64,14 +64,14 @@ namespace Ladeskab
                 case LadeskabState.Available:
                     if (e.IsOpen && !e.IsLocked)
                     { 
-                        _display.show("Tilslut telefon");
+                        _display.Show("Tilslut telefon");
                         _state = LadeskabState.DoorOpen;
                     }
                     break;
                 case LadeskabState.DoorOpen:
                     if (!e.IsOpen && !e.IsLocked)
                     {
-                        _display.show("Indlæs RFID");
+                        _display.Show("Indlæs RFID");
                         _state = LadeskabState.Available;
                     }
                     break;

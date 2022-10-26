@@ -38,34 +38,28 @@ namespace Ladeskab_test.DoorTest
             Assert.That(_uut.DoorIsLocked, Is.True);
         }
 
-
-
         [Test]
-        public void DoorIs()
+        public void DoorIsUnlocked()
         {
-            _uut.OnDoorClose();
-            Assert.That(_uut.DoorIsClosed, Is.True);
+            _uut.UnlockDoor();
+            Assert.That(_uut.DoorIsLocked, Is.False);
         }
 
-        //[Test]
-        //public void DoorOpenEvent()
-        //{
-        //    bool eventRaised = false;
-        //    _uut.DoorOpenEvent += (o, args) => eventRaised = true;
-        //    _uut.DoorOpen();
-        //    Assert.That(eventRaised, Is.True);
-        //}
+        [Test]
+        public void DoorIsClosed()
+        {
+            _uut.OnDoorClose();
+            Assert.That(_uut.DoorIsOpen, Is.False);
+        }
 
-        //[Test]
-        //public void DoorCloseEvent()
-        //{
-        //    bool eventRaised = false;
-        //    _uut.DoorCloseEvent += (o, args) => eventRaised = true;
-        //    _uut.DoorClose();
-        //    Assert.That(eventRaised, Is.True);
-        //}
-
-
+        [Test]
+        public void DoorIsClosedAndLocked()
+        {
+            _uut.OnDoorClose();
+            _uut.LockDoor();
+            Assert.That(_uut.DoorIsOpen, Is.False);
+            Assert.That(_uut.DoorIsLocked, Is.True);
+        }
     }
 }
 
