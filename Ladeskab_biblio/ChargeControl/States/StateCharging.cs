@@ -7,33 +7,28 @@
         public StateCharging(IUsbCharger charger, ChargeControl context) : base(charger, context, Id)
         {
             DisplayMessage = Message;
-            Task.Run(() => MonitorCurrentLevel());
         }
-        public sealed override void MonitorCurrentLevel()
+        public sealed override void MonitorCurrentLevel(double current)
         {
-            while (Charging)
+            if (current > ThresholdError)
             {
-                double currentLevel = Charger.CurrentValue;
-                if (currentLevel > ThresholdError)
+                StopCharge();
+                Context.ChangeState(new StateError(Context));
+            }
+            else if (current < ThresholdCharging)
+            {
+                if (Charger.Connected)
                 {
-                    StopCharge();
-                    Context.ChangeState(new StateError(Context));
+                    // Switch state to StateFullyCharged 
+                    Context.ChangeState(new StateFullyCharged(Charger, Context));
+                    // Exits this loop, but doesn't stop the charger
+                    Charging = false;
                 }
-                else if (currentLevel < ThresholdCharging)
+                else
                 {
-                    if (Charger.Connected)
-                    {
-                        // Switch state to StateFullyCharged 
-                        Context.ChangeState(new StateFullyCharged(Charger, Context));
-                        // Exits this loop, but doesn't stop the charger
-                        Charging = false;
-                    }
-                    else
-                    {
-                        // Device got disconnected, switch state to ready and stop charging
-                        Context.ChangeState(new StateReady(Charger, Context));
-                        StopCharge();
-                    }
+                    // Device got disconnected, switch state to ready and stop charging
+                    Context.ChangeState(new StateReady(Charger, Context));
+                    StopCharge();
                 }
             }
         }

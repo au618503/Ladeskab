@@ -16,7 +16,7 @@ public class StateBase
         StateId = stateId;
     }
 
-    public virtual void MonitorCurrentLevel()
+    public virtual void MonitorCurrentLevel(double current)
     {
        
     }

@@ -5,13 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ladeskab;
 using Ladeskab_biblio.ChargeControl;
 using Ladeskab_biblio.Display;
 using Ladeskab_biblio.Door;
 
 //using Ladeskab.Interfaces;
 
-namespace Ladeskab
+namespace Ladeskab_biblio.StationControl
 {
     public class StationControl
     {
@@ -29,16 +30,20 @@ namespace Ladeskab
         private IUsbCharger _charger;
         private int _oldId;
         private IDoor _door;
-        private Display _display;
+        private Display.Display _display;
         private IRfid _rfid;
+<<<<<<< HEAD:Ladeskab_biblio/StationControlcs.cs
         private ChargeControl?_chargeControl;
+=======
+        private ChargeControl.ChargeControl _chargeControl;
+>>>>>>> origin/LadeskabUnitTests:Ladeskab_biblio/StationControl/StationControlcs.cs
 
         private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
         // Her mangler constructor
         public StationControl(IDoor door, IUsbCharger charger, IRfid rfid)
         {
-            _display = new Display();
+            _display = new Display.Display();
 
             _door = door;
             _door.DoorEvent += HandleDoor;
@@ -53,7 +58,7 @@ namespace Ladeskab
             _chargeControl.StartCharge();*/
         }
 
-        public void OnChargingStateChanged(object? sender, ChargeControl.ChargingEventArgs args)
+        public void OnChargingStateChanged(object? sender, ChargingEventArgs args)
         {
             Console.WriteLine("Charging state changed: " + args.Id + "\nDisplay message: " + args.Message);
         }
@@ -63,8 +68,13 @@ namespace Ladeskab
             {
                 case LadeskabState.Available:
                     if (e.IsOpen && !e.IsLocked)
+<<<<<<< HEAD:Ladeskab_biblio/StationControlcs.cs
                     { 
                         _display.Show("Tilslut telefon");
+=======
+                    {
+                        _display.Vis("Tilslut telefon");
+>>>>>>> origin/LadeskabUnitTests:Ladeskab_biblio/StationControl/StationControlcs.cs
                         _state = LadeskabState.DoorOpen;
                     }
                     break;
@@ -85,7 +95,7 @@ namespace Ladeskab
         {
         }
         // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
-        
+
         private void RfidDetected(int id)
         {
             switch (_state)
