@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Ladeskab_biblio;
-
 using Ladeskab_biblio.Door;
 
 namespace Ladeskab_test.DoorTest
@@ -21,39 +20,50 @@ namespace Ladeskab_test.DoorTest
         [SetUp]
         public void Setup()
         {
-            _uut = new DoorSimulator();
+            _uut = new Door();
         }
 
         [Test]
-        public void DoorOpen()
+        public void DoorIsOpen()
         {
-            _uut.DoorOpen();
-            Assert.That(_uut.DoorOpen, Is.True);
+             _uut.OnDoorOpen();
+            Assert.That(_uut.OnDoorOpen, Is.True);
         }
 
         [Test]
-        public void DoorClose()
+        public void DoorIsLocked()
+            
         {
-            _uut.DoorClose();
-            Assert.That(_uut.DoorOpen, Is.False);
-        }
-        [Test]
-        public void DoorOpenEvent()
-        {
-            bool eventRaised = false;
-            _uut.DoorOpenEvent += (o, args) => eventRaised = true;
-            _uut.DoorOpen();
-            Assert.That(eventRaised, Is.True);
+            _uut.LockDoor();
+            Assert.That(_uut.DoorIsLocked, Is.True);
         }
 
+
+
         [Test]
-        public void DoorCloseEvent()
+        public void DoorIs()
         {
-            bool eventRaised = false;
-            _uut.DoorCloseEvent += (o, args) => eventRaised = true;
-            _uut.DoorClose();
-            Assert.That(eventRaised, Is.True);
+            _uut.OnDoorClose();
+            Assert.That(_uut.DoorIsClosed, Is.True);
         }
+
+        //[Test]
+        //public void DoorOpenEvent()
+        //{
+        //    bool eventRaised = false;
+        //    _uut.DoorOpenEvent += (o, args) => eventRaised = true;
+        //    _uut.DoorOpen();
+        //    Assert.That(eventRaised, Is.True);
+        //}
+
+        //[Test]
+        //public void DoorCloseEvent()
+        //{
+        //    bool eventRaised = false;
+        //    _uut.DoorCloseEvent += (o, args) => eventRaised = true;
+        //    _uut.DoorClose();
+        //    Assert.That(eventRaised, Is.True);
+        //}
 
 
     }
