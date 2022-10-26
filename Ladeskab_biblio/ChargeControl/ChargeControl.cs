@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace Ladeskab_biblio.ChargeControl
 {
-    public class ChargeControl : IPublisher<ChargeControl.ChargingEventArgs>
+    public class ChargeControl : IPublisher<ChargingEventArgs>
     {
         #region Publisher
 
@@ -24,13 +24,6 @@ namespace Ladeskab_biblio.ChargeControl
          * interface, and act according to the specifications
         */
 
-        // Can add error message if more errors are introduced
-        public class ChargingEventArgs : EventArgs
-        {
-            public StateID Id { get; set; }
-            public string? Message { get; set; }
-        }
-
         IUsbCharger _charger;
         private StateBase _state;
         public event EventHandler<ChargingEventArgs> ChargingStateChanged;
@@ -42,6 +35,11 @@ namespace Ladeskab_biblio.ChargeControl
             ChangeState(defaultState);
         }
 
+        public void OnCurrentEvent(object? sender, CurrentEventArgs args)
+        {
+            _state.MonitorCurrentLevel(args.Current);
+        }
+
         public void StartCharge()
         {
             ChangeState(new StateCharging(_charger, this));
@@ -51,12 +49,17 @@ namespace Ladeskab_biblio.ChargeControl
         {
             _state.StopCharge();
         }
-        // All logic delegated to states via GoF State pattern
+        // Monitoring logic delegated to states via GoF State pattern
         public void ChangeState(StateBase state)
         {
             _state = state;
-            ChargingStateChanged.Invoke(this, new ChargingEventArgs()
+            ChargingStateChanged?.Invoke(this, new ChargingEventArgs()
                 { Id = _state.StateId , Message = _state.DisplayMessage});
+        }
+
+        public StateID GetState()
+        {
+            return _state.StateId;
         }
     }
 }
