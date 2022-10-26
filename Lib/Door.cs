@@ -17,6 +17,7 @@ namespace Cabinet_Library
         // Direct access to the door status
         bool DoorIsOpen { get; }
         bool DoorIsLocked { get; }
+        int DoorClosedEvent { get; set; }
 
         void OnDoorOpen();
         void OnDoorClose();
@@ -26,14 +27,23 @@ namespace Cabinet_Library
 
     public class Door : IDoor
     {
+        
         public Door()
         {
             DoorIsOpen = false;
             DoorIsLocked = false;
         }
+
+        public enum Doorstate
+        {
+            Locked,
+            Unlocked
+        }
         public event EventHandler<DoorEventArgs> DoorEvent;
         public bool DoorIsOpen { get; private set; }
         public bool DoorIsLocked { get; private set; }
+        
+        public void SetDoorState(Doorstate new Doorstate);
 
         public void OnDoorOpen()
         {

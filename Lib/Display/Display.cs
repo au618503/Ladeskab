@@ -4,11 +4,12 @@ namespace Cabinet_Library.Display
 {
     public class Display
     {
+        private _display;
         private string _chargingText = "";
-        public void Vis(string Tekst)
+        public void Show(string Text);
         {
             // skrives ud på display, printf, hvad den bliver bedt om.
-            Console.WriteLine(Tekst);
+            Console.WriteLine(Text);
             Console.Write("\n");
             Console.WriteLine(_chargingText);
         }
