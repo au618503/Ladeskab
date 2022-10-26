@@ -27,7 +27,7 @@ namespace Ladeskab_test.DoorTest
         public void DoorIsOpen()
         {
              _uut.OnDoorOpen();
-            Assert.That(_uut.OnDoorOpen, Is.True);
+            Assert.That(_uut.DoorIsOpen, Is.True);
         }
 
         [Test]
