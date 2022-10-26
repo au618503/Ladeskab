@@ -26,11 +26,7 @@ namespace Cabinet_Library
         }
         private void OnNewRfidStatus()
         {
-<<<<<<< HEAD:Lib/RFIDReader.cs
-            RfidEvent?.Invoke(this, new RfidEventArgs() { IsRead = RfidIsRead });
-=======
-            RfidEvent?.Invoke(this, new RfidEventArgs() { Rfid = this.RfidRead});
->>>>>>> origin/main:Ladeskab_biblio/RFIDReader.cs
+            RfidEvent?.Invoke(this, new RfidEventArgs() {  = RfidRead });
         }
     }
 
