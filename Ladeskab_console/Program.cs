@@ -1,7 +1,18 @@
 ﻿using Ladeskab;
+<<<<<<< HEAD
+using Ladeskab_biblio.Door;
+using System;
+using UsbChargerSimulator;
+using NUnit.Framework;
+using NSubstitute;
+using Ladeskab_biblio.ChargeControl;
+
+
+=======
 using Ladeskab_biblio.StationControl;
 using System;
 using Ladeskab_biblio.ChargeControl;
+>>>>>>> origin/LadeskabUnitTests
 
 class Program
 {

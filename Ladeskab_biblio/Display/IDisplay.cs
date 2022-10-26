@@ -3,4 +3,6 @@
 public interface IDisplay
 {
     public void SetChargingText(string chargingText);
+
+
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Ladeskab_biblio.ChargeControl;
 
-namespace Ladeskab
+namespace Ladeskab_biblio.Door
 {
     public class DoorEventArgs : EventArgs
     {
@@ -31,8 +31,8 @@ namespace Ladeskab
             DoorIsOpen = false;
             DoorIsLocked = false;
         }
-        public event EventHandler<DoorEventArgs> DoorEvent;
-        public bool DoorIsOpen{ get; private set; }
+        public event EventHandler<DoorEventArgs>? DoorEvent;
+        public bool DoorIsOpen { get; private set; }
         public bool DoorIsLocked { get; private set; }
 
         public void OnDoorOpen()
@@ -57,7 +57,7 @@ namespace Ladeskab
         }
         private void OnNewDoorStatus()
         {
-            DoorEvent?.Invoke(this, new DoorEventArgs() { IsOpen = this.DoorIsOpen, IsLocked = this.DoorIsLocked });
+            DoorEvent?.Invoke(this, new DoorEventArgs() { IsOpen = DoorIsOpen, IsLocked = DoorIsLocked });
         }
     }
 }

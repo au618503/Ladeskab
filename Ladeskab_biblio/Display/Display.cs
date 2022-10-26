@@ -5,7 +5,7 @@ namespace Ladeskab_biblio.Display
     public class Display
     {
         private string _chargingText = "";
-        public void Vis(string Tekst)
+        public void Show(string Tekst)
         {
             // skrives ud på display, printf, hvad den bliver bedt om.
             Console.WriteLine(Tekst);
