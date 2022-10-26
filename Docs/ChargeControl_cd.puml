@@ -1,6 +1,6 @@
 @startuml ChargeControl_cd
 
-enum ChargeState{
+enum StateID{
     NO_DEVICE
     FULLY_CHARGED
     CHARGING
@@ -8,25 +8,37 @@ enum ChargeState{
 }
 
 class ChargeControl{
-    + enum ChargeState
-    + event StateChanged
+    - BaseState _state
+    + void ChangeState(BaseState)
     + bool DeviceConnected()
-    + int StartCharger()
-    + int StopCharger()
-    - void OnStateChanged()
-    - void MonitorCurrentLevel()
-    - double GetCurrentLevel()
+    + int StartCharge()
+    + int StopCharge()
+    + void OnCurrentEvent()
 }
 
-interface USBCharger{
+class BaseState{
+    + enum StateID StateId
+    + string DisplayMessage
+    + void MonitorCurrentEvent(double current)
+
+}
+
+interface IUSBCharger{
+    + event CurrentEvent
     + int StartCharging()
     + int StopCharging()
 }
 
-ChargeState <|.. ChargeControl
+interface IDisplay{
+    SetChargingMessage(string msg)
+}
+
+StateID <-- ChargeControl
 StationControl --> ChargeControl
-ChargeControl --> Display
+ChargeControl --> IDisplay
 ChargeControl --> IUSBCharger
+BaseState --* ChargeControl
+BaseState --> StateID
 
 
 @enduml
