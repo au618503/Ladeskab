@@ -1,4 +1,4 @@
-namespace Ladeskab_test
+namespace UnitTests
 {
     public class Tests
     {
