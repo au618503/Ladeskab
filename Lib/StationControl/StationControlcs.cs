@@ -75,10 +75,7 @@ namespace Cabinet_Library.StationControl
                     break;
             }
         }
-
-        private void HandleChargeCurrent(object sender, CurrentEventArgs e)
-        {
-        }
+        
 
         private void HandleRfidDetected(object sender, RfidEventArgs e)
         {
