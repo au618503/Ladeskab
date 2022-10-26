@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ladeskab_biblio.ChargeControl;
-using Ladeskab_biblio.ChargeControl.States;
-using Ladeskab_biblio.Display;
-using Ladeskab_biblio.StationControl;
+using Cabinet_Library.ChargeControl;
+using Cabinet_Library.ChargeControl.States;
+using Cabinet_Library.Display;
+using Cabinet_Library.StationControl;
 using NSubstitute;
 
-namespace Ladeskab_test.ChargeControlTests
+namespace UnitTests.ChargeControlTests
 {
     public class TestChargeControlInput
     {
@@ -32,7 +32,7 @@ namespace Ladeskab_test.ChargeControlTests
             _usbCharger.CurrentValue.Returns(6);
             _uut.StartCharge();
             _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 6 });
-            Assert.AreEqual( StateID.CHARGING, _uut.GetState());
+            Assert.AreEqual(StateID.CHARGING, _uut.GetState());
         }
 
         [Test]

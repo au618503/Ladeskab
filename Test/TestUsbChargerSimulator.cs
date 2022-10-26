@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Ladeskab_biblio.ChargeControl;
+using Cabinet_Library.ChargeControl;
 
-namespace UsbSimulator.Test
+namespace UnitTests
 {
     [TestFixture]
     public class TestUsbChargerSimulator
@@ -46,7 +46,7 @@ namespace UsbSimulator.Test
 
             _uut.StartCharge();
 
-            System.Threading.Thread.Sleep(1100);
+            Thread.Sleep(1100);
 
             Assert.That(numValues, Is.GreaterThan(4));
         }
@@ -59,7 +59,7 @@ namespace UsbSimulator.Test
 
             _uut.StartCharge();
 
-            System.Threading.Thread.Sleep(300);
+            Thread.Sleep(300);
 
             Assert.That(lastValue, Is.LessThan(500.0));
         }
@@ -69,7 +69,7 @@ namespace UsbSimulator.Test
         {
             _uut.StartCharge();
 
-            System.Threading.Thread.Sleep(300);
+            Thread.Sleep(300);
 
             Assert.That(_uut.CurrentValue, Is.LessThan(500.0));
         }
@@ -82,7 +82,7 @@ namespace UsbSimulator.Test
 
             _uut.StartCharge();
 
-            System.Threading.Thread.Sleep(1100);
+            Thread.Sleep(1100);
 
             Assert.That(lastValue, Is.EqualTo(_uut.CurrentValue));
         }
@@ -193,7 +193,7 @@ namespace UsbSimulator.Test
 
             _uut.StartCharge();
 
-            System.Threading.Thread.Sleep(300);
+            Thread.Sleep(300);
 
             _uut.StopCharge();
 
@@ -205,7 +205,7 @@ namespace UsbSimulator.Test
         {
             _uut.StartCharge();
 
-            System.Threading.Thread.Sleep(300);
+            Thread.Sleep(300);
 
             _uut.StopCharge();
 
@@ -220,13 +220,13 @@ namespace UsbSimulator.Test
 
             _uut.StartCharge();
 
-            System.Threading.Thread.Sleep(300);
+            Thread.Sleep(300);
 
             _uut.StopCharge();
             lastValue = 1000;
 
             // Wait for a tick
-            System.Threading.Thread.Sleep(300);
+            Thread.Sleep(300);
 
             // No new value received
             Assert.That(lastValue, Is.EqualTo(1000.0));

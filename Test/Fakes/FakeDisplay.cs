@@ -1,6 +1,6 @@
-﻿using Ladeskab_biblio.Display;
+﻿using Cabinet_Library.Display;
 
-namespace Ladeskab_test.Fakes;
+namespace UnitTests.Fakes;
 
 public class FakeDisplay : IDisplay
 {
