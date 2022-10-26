@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Lib\Cabinet_Library.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="LoggerTests\" />
+  </ItemGroup>
+
 </Project>
