@@ -17,5 +17,13 @@
                 sw.WriteLine(DateTime.Now + ": Cabinet unlocked. \nRFID: " + id);
             }
         }
+
+        public void LogChargingError(double current)
+        {
+            using (StreamWriter sw = File.AppendText(FileName))
+            {
+                sw.WriteLine(DateTime.Now + ": Charging error. Current value: " + current);
+            }
+        }
     }
 }
