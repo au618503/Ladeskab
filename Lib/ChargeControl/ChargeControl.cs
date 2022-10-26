@@ -41,6 +41,7 @@ namespace Cabinet_Library.ChargeControl
         public ChargeControl(IUsbCharger charger, IDisplay display)
         {
             _charger = charger;
+            _charger.CurrentValueEvent += OnCurrentEvent;
             _display = display;
             var defaultState = new StateReady(_charger, this);
             ChangeState(defaultState);
