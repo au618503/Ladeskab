@@ -4,10 +4,15 @@ using Cabinet_Library.ObserverPattern;
 
 namespace Cabinet_Library.ChargeControl
 {
-    public class ChargeControl : IPublisher<ChargingEventArgs>
+    public class ChargeControl
     {
         #region Publisher
-
+        /*
+         * IPublisher<ChargingEventArgs> implementation
+         *
+         * Deprecated: ChargeControl is not supposed to send events
+         * UNLESS we decide to add an error ocurred event
+         *
         public void AddListener(IObserver observer, EventHandler<ChargingEventArgs> callback)
         {
             ChargingStateChanged += callback;
@@ -16,7 +21,7 @@ namespace Cabinet_Library.ChargeControl
         public void RemoveListener(EventHandler<ChargingEventArgs> callback)
         {
             ChargingStateChanged -= callback;
-        }
+        }*/
         #endregion
 
         /* Controls charging via State pattern
