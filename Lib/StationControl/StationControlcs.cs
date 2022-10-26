@@ -7,8 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Cabinet_Library.ChargeControl;
 
-//using Ladeskab.Interfaces;
-
 namespace Cabinet_Library.StationControl
 {
     public class StationControl
