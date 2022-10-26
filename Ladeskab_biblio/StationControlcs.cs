@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ladeskab_biblio.ChargeControl;
 using Ladeskab_biblio.Display;
+using Ladeskab_biblio.Door;
 
 //using Ladeskab.Interfaces;
 
