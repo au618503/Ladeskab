@@ -45,10 +45,14 @@ namespace Cabinet_Library.StationControl
             //_charger.CurrentValueEvent += HandleChargeCurrent;
 
             _rfid = rfid;
+<<<<<<< HEAD:Lib/StationControl/StationControlcs.cs
             //_rfid.RfidEvent += RfidDetected;
             /* TEST CHARGE CONTROL
              *_chargeControl = new ChargeControl(_charger, OnChargingStateChanged);
             _chargeControl.StartCharge();*/
+=======
+            _rfid.RfidEvent += HandleRfidDetected;
+>>>>>>> origin/main:Ladeskab_biblio/StationControlcs.cs
         }
 
         public void OnChargingStateChanged(object? sender, ChargingEventArgs args)
@@ -82,6 +86,12 @@ namespace Cabinet_Library.StationControl
         private void HandleChargeCurrent(object sender, CurrentEventArgs e)
         {
         }
+
+        private void HandleRfidDetected(object sender, RfidEventArgs e)
+        {
+            RfidDetected(e.Rfid);
+        }
+
         // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
 
         private void RfidDetected(int id)

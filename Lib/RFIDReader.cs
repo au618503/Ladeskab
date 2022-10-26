@@ -4,16 +4,14 @@ namespace Cabinet_Library
 {
     public class RfidEventArgs : EventArgs
     {
-        public int IsRead { set; get; }
+        public int Rfid { set; get; }
     }
 
     public interface IRfid
     {
-        // Event triggered on door opened or closed
         event EventHandler<RfidEventArgs> RfidEvent;
 
-        // Direct access to the door status
-        int RfidIsRead { get; }
+        int RfidRead { get; }
 
         void OnRfidRead(int id);
     }
@@ -21,14 +19,18 @@ namespace Cabinet_Library
     public class RfidReader : IRfid
     {
         public event EventHandler<RfidEventArgs> RfidEvent;
-        public int RfidIsRead { get; private set; }
+        public int RfidRead { get; private set; }
         public void OnRfidRead(int id)
         {
             OnNewRfidStatus();
         }
         private void OnNewRfidStatus()
         {
+<<<<<<< HEAD:Lib/RFIDReader.cs
             RfidEvent?.Invoke(this, new RfidEventArgs() { IsRead = RfidIsRead });
+=======
+            RfidEvent?.Invoke(this, new RfidEventArgs() { Rfid = this.RfidRead});
+>>>>>>> origin/main:Ladeskab_biblio/RFIDReader.cs
         }
     }
 
