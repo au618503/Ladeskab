@@ -1,4 +1,5 @@
 ﻿using Ladeskab_biblio.ChargeControl.States;
+using Ladeskab_biblio.Display;
 using Ladeskab_biblio.ObserverPattern;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
@@ -25,12 +26,14 @@ namespace Ladeskab_biblio.ChargeControl
         */
 
         IUsbCharger _charger;
+        private IDisplay _display;
         private StateBase _state;
         public event EventHandler<ChargingEventArgs> ChargingStateChanged;
         
-        public ChargeControl(IUsbCharger charger)
+        public ChargeControl(IUsbCharger charger, IDisplay display)
         {
             _charger = charger;
+            _display = display;
             var defaultState = new StateReady(_charger, this);
             ChangeState(defaultState);
         }
@@ -53,6 +56,7 @@ namespace Ladeskab_biblio.ChargeControl
         public void ChangeState(StateBase state)
         {
             _state = state;
+            _display.SetChargingText(_state.DisplayMessage);
             ChargingStateChanged?.Invoke(this, new ChargingEventArgs()
                 { Id = _state.StateId , Message = _state.DisplayMessage});
         }

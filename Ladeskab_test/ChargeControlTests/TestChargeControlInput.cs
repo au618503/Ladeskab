@@ -21,7 +21,7 @@ namespace Ladeskab_test.ChargeControlTests
         public void Setup()
         {
             _usbCharger = Substitute.For<IUsbCharger>();
-            _uut = new ChargeControl(_usbCharger);
+            _uut = new ChargeControl(_usbCharger, _display);
             _usbCharger.CurrentValueEvent += _uut.OnCurrentEvent;
         }
 
@@ -36,12 +36,21 @@ namespace Ladeskab_test.ChargeControlTests
         }
 
         [Test]
-        public void TestCharging_CurrentTooHigh_StateIsError()
+        public void Test_EventRaised_DisplayCalledSetCText()
+        {
+            _uut.StartCharge();
+            CurrentEventArgs testargs = new CurrentEventArgs() { Current = 10 };
+            _usbCharger.CurrentValueEvent += Raise.EventWith(testargs);
+            _display.ReceivedWithAnyArgs().SetChargingText(default);
+        }
+
+        [Test]
+        public void TestCharging_CurrentTooHigh_UsbChargerStopped()
         {
             _usbCharger.Connected.Returns(true);
             _uut.StartCharge();
             _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 530 });
-            Assert.AreEqual(StateID.ERROR, _uut.GetState());
+            _usbCharger.Received().StopCharge();
         }
     }
 }

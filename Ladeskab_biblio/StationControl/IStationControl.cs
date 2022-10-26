@@ -2,7 +2,11 @@
 
 namespace Ladeskab_biblio.StationControl;
 
-public interface IStationControl : IObserver<ChargingEventArgs>
+// What should StationControl do on ChargingEvent ????
+public interface IStationControl
 {
-    void ChargingEventCallback();
+    void OnDoorOpened();
+    void OnDoorClosed();
+    void OnChargerError();
+    void OnRfidDetected(int id);
 }
