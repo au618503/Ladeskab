@@ -11,67 +11,40 @@ using Cabinet_Library.Door;
 using Cabinet_Library_StationControl;
 using Cabinet_Library.StationControl;
 using Cabinet_Library.StationControl.States;
+using Cabinet_Library.Logger;
+using Cabinet_Library.RfIdReader;
 
 namespace UnitTests.StationControlTests
 {
-    public class TestStationControlInput
+    public class TestStationControl
+        
     {
-        private IDisplay _display = Substitute.For<IDisplay>();
-        private IChargeControl _chargeControl = Substitute.For<IChargeControl>();
-        private IDoor _door = Substitute.For<IDoor>();
-        private StationControl _uut;
-        private IStationControl _stationControl = Substitute.For<IStationControl>();
-        
-        
+        private DoorEventArgs _dooreventargs;
+        private IDoor _uut;
+
         [SetUp]
         public void Setup()
         {
-            _uut = new StationControl(_chargeControl, _display, _door, _stationControl);
+
+            //SetUp for Door
+            _uut = Substitute.For<IDoor>();
+            _dooreventargs = new DoorEventArgs() { IsOpen = true };
+            
+            
+
         }
 
         [Test]
-        public void TestDoorOpened_StateIsDoorOpened()
+        public void TestDoor_StateIsChanging()
         {
-            _door.DoorOpenedEvent += Raise.EventWith(new DoorEventArgs() { DoorOpen = true });
-            Assert.That(_uut.GetState(), Is.EqualTo(StationStateID.DOOR_OPENED));
+            _uut.DoorEvent += Raise.EventWith(_dooreventargs);
+            
+            Assert.That(_uut.DoorIsOpen(), Is.EqualTo(DoorStateID.CHANGING));
+
         }
 
-        [Test]
-        public void TestDoorOpened_DisplayCalledSetDoorOpenText()
-        {
-            _door.DoorOpenedEvent += Raise.EventWith(new DoorEventArgs() { DoorOpen = true });
-            _display.Received().SetDoorOpenText("Door is open");
-        }
 
-        [Test]
-        public void TestDoorClosed_StateIsAvailable()
-        {
-            _door.DoorOpenedEvent += Raise.EventWith(new DoorEventArgs() { DoorOpen = true });
-            _door.DoorOpenedEvent += Raise.EventWith(new DoorEventArgs() { DoorOpen = false });
-            Assert.That(_uut.GetState(), Is.EqualTo(StationStateID.AVAILABLE));
-        }
+       
 
-        [Test]
-        public void TestDoorClosed_DisplayCalledSetDoorClosedText()
-        {
-            _door.DoorOpenedEvent += Raise.EventWith(new DoorEventArgs() { DoorOpen = true });
-            _door.DoorOpenedEvent += Raise.EventWith(new DoorEventArgs() { DoorOpen = false });
-            _display.Received().SetDoorClosedText("Door is closed");
-        }
-
-        [Test]
-        public void TestRfidDetected_StateIsOccupied()
-        {
-            _door.DoorOpenedEvent += Raise.EventWith(new DoorEventArgs() { DoorOpen = true });
-            _door.DoorOpenedEvent += Raise.EventWith(new DoorEventArgs() { DoorOpen = false });
-            _uut.RfidDetected(1);
-            Assert.That(_uut.GetState(), Is.EqualTo(StationStateID.OCCUPIED));
-        }
-
-        [Test]
-        public void TestRfidDetected_DisplayCalledSetOccupiedText()
-        {
-            _door.DoorOpenedEvent += Raise.Event
-
-    }
+   
 }
