@@ -5,15 +5,10 @@ namespace Cabinet_Library.RfIdReader
 
     public class RfidReader : IRfIdReader
     {
-        public event EventHandler<RfidEventArgs> RfidEvent;
-        public int RfidRead { get; private set; }
-        public void OnRfidRead(int id)
+        public event EventHandler<RfidEventArgs>? RfidEvent;
+        public void SimulateRfidDetected(int id)
         {
-            OnNewRfidStatus();
-        }
-        private void OnNewRfidStatus()
-        {
-            RfidEvent?.Invoke(this, new RfidEventArgs() { Rfid = RfidRead });
+            RfidEvent?.Invoke(this, new RfidEventArgs() { Rfid = id });
         }
     }
 
