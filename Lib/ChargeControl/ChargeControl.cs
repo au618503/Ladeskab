@@ -25,7 +25,7 @@ namespace Cabinet_Library.ChargeControl
         */
 
         IUsbCharger _charger;
-        private IDisplay _display;
+        public IDisplay _display;
         private StateBase _state;
         public event EventHandler<ChargingEventArgs> ChargingStateChanged;
 

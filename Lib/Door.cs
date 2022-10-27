@@ -9,7 +9,7 @@ namespace Cabinet_Library
         public bool IsOpen { set; get; }
         public bool IsLocked { set; get; }
     }
-
+    //IDoor
     public interface IDoor
     {
         // Event triggered on door opened or closed
