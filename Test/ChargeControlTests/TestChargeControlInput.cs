@@ -124,15 +124,6 @@ namespace UnitTests.ChargeControlTests
         }
 
         [Test]
-        public void TestCharging_DoneCharging_UsbChargerStopped()
-        {
-            _usbCharger.Connected.Returns(true);
-            _uut.StartCharge();
-            _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 0 });
-            _usbCharger.Received().StopCharge();
-        }
-
-        [Test]
         public void TestCharging_NotConnected_UsbChargerStopped()
         {
             _usbCharger.Connected.Returns(false);
@@ -140,8 +131,5 @@ namespace UnitTests.ChargeControlTests
             _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 0 });
             _usbCharger.Received().StopCharge();
         }
-
-        // Test of StartCharge()
-
     }
 }
