@@ -131,5 +131,14 @@ namespace UnitTests.ChargeControlTests
             _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 0 });
             _usbCharger.Received().StopCharge();
         }
+
+        // Test af StartCharge()
+        [Test]
+        public void TestCharging_UsbChargerStarted()
+        {
+            _usbCharger.Connected.Returns(true);
+            _uut.StartCharge();
+            _usbCharger.Received().StartCharge();
+        }
     }
 }
