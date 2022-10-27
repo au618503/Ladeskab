@@ -5,7 +5,7 @@ public class StateError : StateBase
 {
     private const StateID Id = StateID.ERROR;
     private const string Message = "Charging error. Contact support.";
-    public StateError(ChargeControl context) : base(null, context, Id)
+    public StateError(IUsbCharger charger, ChargeControl context) : base(charger, context, Id)
     {
         Charging = false;
         DisplayMessage = Message;

@@ -6,40 +6,17 @@ namespace Cabinet_Library.ChargeControl
 {
     public class ChargeControl : IChargeControl
     {
-        #region Publisher
-
-        /*
-         * IPublisher<ChargingEventArgs> implementation
-         *
-         * Deprecated: ChargeControl is not supposed to send events
-         * UNLESS we decide to add an error ocurred event
-         *
-        public void AddListener(IObserver observer, EventHandler<ChargingEventArgs> callback)
-        {
-            ChargingStateChanged += callback;
-        }
-
-        public void RemoveListener(EventHandler<ChargingEventArgs> callback)
-        {
-            ChargingStateChanged -= callback;
-        }*/
-
-        #endregion
-
-        /* Controls charging via State pattern
-         * States check currentlevel via MonitorCurrentLevel and make sure if current is above
-         * error level, charging is stopped, as well as set display message
-        */
-
+        
         IUsbCharger _charger;
         public IDisplay _display;
 
         private StateBase _state;
+        
         // Initial idea was to notify StationControl when state changes
         // This is unnecessary
         // Notification on ERROR sounds like a good idea though. Use delegate set in constructor?
 
-        // public event EventHandler<ChargingEventArgs> ChargingStateChanged;
+        public event EventHandler<ChargingEventArgs> ErrorEvent;
 
         public ChargeControl(IUsbCharger charger, IDisplay display)
         {
@@ -76,8 +53,11 @@ namespace Cabinet_Library.ChargeControl
         {
             _state = state;
             _display.SetChargingText(_state.DisplayMessage);
-            /*ChargingStateChanged?.Invoke(this, new ChargingEventArgs()
-            { Id = _state.StateId, Message = _state.DisplayMessage, Current = _charger.CurrentValue });*/
+        }
+
+        public void OnError(int current)
+        {
+            ErrorEvent.Invoke(this, new ChargingEventArgs(){Current = current});
         }
 
         public StateID GetState()

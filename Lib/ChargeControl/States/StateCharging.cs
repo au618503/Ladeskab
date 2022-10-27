@@ -16,7 +16,7 @@ namespace Cabinet_Library.ChargeControl.States
             if (current > ThresholdError)
             {
                 StopCharge();
-                Context.ChangeState(new StateError(Context));
+                Context.ChangeState(new StateError(Charger, Context));
             }
             else if (current < ThresholdCharging)
             {

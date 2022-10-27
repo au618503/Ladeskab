@@ -16,7 +16,7 @@ public class StateFullyCharged : StateBase
         if (current > ThresholdError)
         {
             StopCharge();
-            Context.ChangeState(new StateError(Context));
+            Context.ChangeState(new StateError(Charger, Context));
         }
     }
 }

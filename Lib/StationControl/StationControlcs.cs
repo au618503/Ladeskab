@@ -65,6 +65,7 @@ namespace Cabinet_Library_StationControl
             _door.DoorEvent += OnDoorEvent;
             _display = display;
             _chargeControl = chargeControl;
+            _chargeControl.ErrorEvent += OnChargerError;
             _logFile = logFile;
             _state = new AvailableState(this, _chargeControl, _display, _door, null);
 
