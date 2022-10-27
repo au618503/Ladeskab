@@ -35,27 +35,16 @@ namespace UnitTests.ChargeControlTests
             _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 6 });
             Assert.That(_uut.GetState(), Is.EqualTo(StateID.CHARGING));
         }
-
         [Test]
-        public void Test_EventRaised_DisplayCalledSetCText()
-        {
-            _usbCharger.Connected.Returns(false);
-            _uut.StartCharge();
-            CurrentEventArgs testargs = new CurrentEventArgs() { Current = 0};
-            _usbCharger.CurrentValueEvent += Raise.EventWith(testargs);
-            _display.Received().SetChargingText("Charging error. Contact support.");
-            //Assert.That(_display.SetChargingText(),Does.Contain("Test"));
-            //Assert.That(_display._stateText, Does.Contain("Test"));
-        }
-
-        [Test]
-        public void TestCharging_CurrentTooHigh_UsbChargerStopped()
+        public void Test_EventRaised_DisplayCalledSetChargingText_StateCharging()
         {
             _usbCharger.Connected.Returns(true);
             _uut.StartCharge();
-            _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 530 });
-            _usbCharger.Received().StopCharge();
+            CurrentEventArgs testargs = new CurrentEventArgs() { Current = 6 };
+            _usbCharger.CurrentValueEvent += Raise.EventWith(testargs);
+            _display.Received().SetChargingText("Charging...");
         }
+
         [Test]
         public void TestCharging_CurrentTooHigh_StateIsError()
         {
@@ -63,9 +52,20 @@ namespace UnitTests.ChargeControlTests
             _uut.StartCharge();
             _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 530 });
             Assert.That(_uut.GetState(), Is.EqualTo(StateID.ERROR));
-            
         }
 
+        [Test]
+        public void Test_EventRaised_DisplayCalledSetChargingText_StateError()
+        {
+            _usbCharger.Connected.Returns(true);
+            _uut.StartCharge();
+            CurrentEventArgs testargs = new CurrentEventArgs() { Current = 530 };
+            _usbCharger.CurrentValueEvent += Raise.EventWith(testargs);
+            _display.Received().SetChargingText("Charging error. Contact support.");
+            //Assert.That(_display.SetChargingText(),Does.Contain("Test"));
+            //Assert.That(_display._stateText, Does.Contain("Test"));
+        }
+        
         [Test]
         public void TestCharging_StateIsFullyCharged()
         {
@@ -76,6 +76,16 @@ namespace UnitTests.ChargeControlTests
         }
 
         [Test]
+        public void Test_EventRaised_DisplayCalledSetChargingText_StateFullyCharged()
+        {
+            _usbCharger.Connected.Returns(true);
+            _uut.StartCharge();
+            CurrentEventArgs testargs = new CurrentEventArgs() { Current = 0 };
+            _usbCharger.CurrentValueEvent += Raise.EventWith(testargs);
+            _display.Received().SetChargingText("Device fully charged.");
+        }
+
+        [Test]
         public void TestCharging_CurrentTooLow_StateIsReady()
         {
             _usbCharger.Connected.Returns(false);
@@ -83,5 +93,55 @@ namespace UnitTests.ChargeControlTests
             _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 0 });
             Assert.That(_uut.GetState(), Is.EqualTo(StateID.READY));
         }
+
+        [Test]
+        public void Test_EventRaised_DisplayCalledSetChargingText_StateReady()
+        {
+            _usbCharger.Connected.Returns(false);
+            _uut.StartCharge();
+            CurrentEventArgs testargs = new CurrentEventArgs() { Current = 0 };
+            _usbCharger.CurrentValueEvent += Raise.EventWith(testargs);
+            _display.Received().SetChargingText("");
+        }
+
+        // Test of StopCharge()
+        [Test]
+        public void TestCharging_NotDoneCharging_UsbChargerNotStopped()
+        {
+            _usbCharger.Connected.Returns(true);
+            _uut.StartCharge();
+            _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 6 });
+            _usbCharger.DidNotReceive().StopCharge();
+        }
+
+        [Test]
+        public void TestCharging_CurrentTooHigh_UsbChargerStopped()
+        {
+            _usbCharger.Connected.Returns(true);
+            _uut.StartCharge();
+            _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 530 });
+            _usbCharger.Received().StopCharge();
+        }
+
+        [Test]
+        public void TestCharging_DoneCharging_UsbChargerStopped()
+        {
+            _usbCharger.Connected.Returns(true);
+            _uut.StartCharge();
+            _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 0 });
+            _usbCharger.Received().StopCharge();
+        }
+
+        [Test]
+        public void TestCharging_NotConnected_UsbChargerStopped()
+        {
+            _usbCharger.Connected.Returns(false);
+            _uut.StartCharge();
+            _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 0 });
+            _usbCharger.Received().StopCharge();
+        }
+
+        // Test of StartCharge()
+
     }
 }
