@@ -1,4 +1,4 @@
-﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -37,17 +37,17 @@ namespace Cabinet_Library_StationControl
     }
 
              #endregion
-
-        public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl, IRFIDReader rfidReader, ILogFile logFile)
-        {
+             
         private IDoor _door;
         private IDisplay _display;
         private IChargeControl _chargeControl;
         private IRfIdReader _rfid;
         private ILogger _logFile;
         private StationStateBase _state;
-        public event EventHandler<StationStateBaseArgs> StationStateChanged;
-        public event EventHandler<DoorHandlerArgs> DoorStateChanged;
+
+        public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl, IRFIDReader rfidReader, ILogFile logFile)
+        {
+        
         }
 
         public void OnDoorEvent(object? sender, DoorEventArgs args)
@@ -55,11 +55,11 @@ namespace Cabinet_Library_StationControl
         if (args.IsOpen) 
         {
             _state.OnDoorOpen();
-        }''
+        }
         else{
             _state.OnDoorClose();
         }
-    }
+      }
 
         public void OnChargeEvent(object? sender, ChargingEventArgs args)
         {
@@ -70,7 +70,6 @@ namespace Cabinet_Library_StationControl
         {
             object value = _state.CheckRfid(args.Rfid);
         }
-
         public void OnStartCharge(object? sender, ChargingEventArgs args)
         {
             _state.StartCharge();   

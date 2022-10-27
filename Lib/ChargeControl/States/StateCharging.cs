@@ -8,6 +8,7 @@ namespace Cabinet_Library.ChargeControl.States
         private const string Message = "Charging...";
         public StateCharging(IUsbCharger charger, ChargeControl context) : base(charger, context, Id)
         {
+            Charger.StartCharge();
             DisplayMessage = Message;
         }
         public sealed override void MonitorCurrentLevel(double current)
