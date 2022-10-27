@@ -29,22 +29,25 @@ namespace UnitTests.StationControlTests
             //SetUp for Door
             _uut = Substitute.For<IDoor>();
             _dooreventargs = new DoorEventArgs() { IsOpen = true };
-            
-            
 
+
+            //setUp for RfID
+            IRfIdReader _rfid = Substitute.For<IRfIdReader>();
         }
 
         [Test]
-        public void TestDoor_StateIsChanging()
+        public void TestDoor_IsOpen()
         {
             _uut.DoorEvent += Raise.EventWith(_dooreventargs);
-            
-            Assert.That(_uut.DoorIsOpen(), Is.EqualTo(DoorStateID.CHANGING));
+            _uut.DoorIsOpen.Returns(true);
+
+            Assert.That(_uut.DoorIsOpen, Is.EqualTo(true));
 
         }
+        
+        
 
 
-       
 
-   
+  
 }
