@@ -20,9 +20,9 @@ namespace UnitTests
         }
 
         [Test]
-        public void ctor_IsConnected()
+        public void ctor_IsNotConnected()
         {
-            Assert.That(_uut.Connected, Is.True);
+            Assert.That(_uut.Connected, Is.False);
         }
 
         [Test]
