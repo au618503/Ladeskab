@@ -13,18 +13,16 @@ namespace UnitTests.ChargeControlTests
 {
     public class TestChargeControlInput
     {
-        private IDisplay _display = Substitute.For<IDisplay>();
-        //private Display _display;
+        private IDisplay _display;
         private IStationControl _stationControl = Substitute.For<IStationControl>();
         private IUsbCharger _usbCharger;
         private ChargeControl _uut;
         [SetUp]
         public void Setup()
         {
+            _display = Substitute.For<IDisplay>();
             _usbCharger = Substitute.For<IUsbCharger>();
-            //_display = new Display();
             _uut = new ChargeControl(_usbCharger, _display);
-            _usbCharger.CurrentValueEvent += _uut.OnCurrentEvent;
         }
 
         [Test]
@@ -63,8 +61,6 @@ namespace UnitTests.ChargeControlTests
             CurrentEventArgs testargs = new CurrentEventArgs() { Current = 530 };
             _usbCharger.CurrentValueEvent += Raise.EventWith(testargs);
             _display.Received().SetChargingText("Charging error. Contact support.");
-            //Assert.That(_display.SetChargingText(),Does.Contain("Test"));
-            //Assert.That(_display._stateText, Does.Contain("Test"));
         }
         
         [Test]
