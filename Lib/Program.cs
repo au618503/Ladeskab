@@ -1,5 +1,6 @@
 ﻿using Cabinet_Library;
 using Cabinet_Library.ChargeControl;
+using Cabinet_Library.RfIdReader;
 using Cabinet_Library.StationControl;
 using System;
 

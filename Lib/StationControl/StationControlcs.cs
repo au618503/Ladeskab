@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -6,141 +6,98 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cabinet_Library.ChargeControl;
+using Cabinet_Library;
+using System.Runtime.InteropServices;
+using Cabinet_Library.ObserverPattern;
+using Cabinet_Library.Display;
+using Cabinet_Library.StationControl;
+using Cabinet_Library.StationControl.States;
+using Cabinet_Library.Logger;
+using Cabinet_Library.RfIdReader;
 
-//using Ladeskab.Interfaces;
-
-namespace Cabinet_Library.StationControl
+namespace Cabinet_Library_StationControl
 {
-    public class StationControl
+    public class StationControl : IStationControl 
+        {
+              #region Events 
+              //events for door and rdif
+
+           public void OnRfidEvent(RfidEventArgs e, object RfidDetectedEventDetected)
+          {
+            int id = e.Rfid;
+            _state.OnRfidDetected(id);
+           }
+
+
+           public void HandleDoorEvent(object sender, DoorEventArgs e)
     {
-        // Enum med tilstande ("states") svarende til tilstandsdiagrammet for klassen
-        private enum LadeskabState
-        {
-            Available,
-            Locked,
-            DoorOpen
-        };
-
-        // Her mangler flere member variable
-        private LadeskabState _state;
-        //private IChargeControl _charger;
-        private IUsbCharger _charger;
-        private int _oldId;
-        private IDoor _door;
-        private Display.Display _display;
-        private IRfid _rfid;
-        private ChargeControl.ChargeControl _chargeControl;
-
-        private string logFile = "logfile.txt"; // Navnet på systemets log-fil
-
-        // Her mangler constructor
-        public StationControl(IDoor door, IUsbCharger charger, IRfid rfid)
-        {
-            _display = new Display.Display();
-
-            _door = door;
-            _door.DoorEvent += HandleDoor;
-
-            _charger = charger;
-            //_charger.CurrentValueEvent += HandleChargeCurrent;
-
-            _rfid = rfid;
-            _rfid.RfidEvent += HandleRfidDetected;
-        }
-
-        public void OnChargingStateChanged(object? sender, ChargingEventArgs args)
-        {
-            Console.WriteLine("Charging state changed: " + args.Id + "\nDisplay message: " + args.Message);
-        }
-        private void HandleDoor(object sender, DoorEventArgs e)
-        {
-            switch (_state)
-            {
-                case LadeskabState.Available:
-                    if (e.IsOpen && !e.IsLocked)
-                    {
-                        _display.Show("Tilslut telefon");
-                        _state = LadeskabState.DoorOpen;
-                    }
-                    break;
-                case LadeskabState.DoorOpen:
-                    if (!e.IsOpen && !e.IsLocked)
-                    {
-                        _display.Show("Indlæs RFID");
-                        _state = LadeskabState.Available;
-                    }
-                    break;
-                default:
-                    // do nothing
-                    break;
-            }
-        }
-        
-
-        private void HandleRfidDetected(object sender, RfidEventArgs e)
-        {
-            RfidDetected(e.Rfid);
-        }
-
-        // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
-
-        private void RfidDetected(int id)
-        {
-            switch (_state)
-            {
-                case LadeskabState.Available:
-                    // Check for ladeforbindelse
-                    if (_charger.Connected)
-                    {
-                        _door.LockDoor();
-                        _charger.StartCharge();
-                        _oldId = id;
-                        using (var writer = File.AppendText(logFile))
-                        {
-                            writer.WriteLine(DateTime.Now + ": Skab låst med RFID: {0}", id);
-                        }
-
-                        Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
-                        _display.Show("Ladeskab optaget");
-                        _state = LadeskabState.Locked;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
-                        _display.Show("Tilslutningsfejl");
-                    }
-
-                    break;
-
-                case LadeskabState.DoorOpen:
-                    // Ignore
-                    break;
-
-                case LadeskabState.Locked:
-                    // Check for correct ID
-                    if (id == _oldId)
-                    {
-                        _charger.StopCharge();
-                        _door.UnlockDoor();
-                        using (var writer = File.AppendText(logFile))
-                        {
-                            writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
-                        }
-
-                        Console.WriteLine("Tag din telefon ud af skabet og luk døren");
-                        _display.Show("Fjern telefon");
-                        _state = LadeskabState.Available;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Forkert RFID tag");
-                        _display.Show("RFID fejl");
-                    }
-
-                    break;
-            }
-        }
-
-        // Her mangler de andre trigger handlere
+        Doorevent = e.DoorEvent;
+        OnNewDoorStatús.Inwoke(this, new);
+        return Doorevent;
     }
-}
+
+             #endregion
+             
+        private IDoor _door;
+        private IDisplay _display;
+        private IChargeControl _chargeControl;
+        private IRfIdReader _rfid;
+        private ILogger _logFile;
+        private StationStateBase _state;
+
+        public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl, IRFIDReader rfidReader, ILogFile logFile)
+        {
+        
+        }
+
+        public void OnDoorEvent(object? sender, DoorEventArgs args)
+        {
+        if (args.IsOpen) 
+        {
+            _state.OnDoorOpen();
+        }
+        else{
+            _state.OnDoorClose();
+        }
+      }
+
+        public void OnChargeEvent(object? sender, ChargingEventArgs args)
+        {
+            _state.MonitorChargeState(args.Id, args.Message);
+        }
+
+        public void OnRfidEvent(object? sender, RfidEventArgs args)
+        {
+            object value = _state.CheckRfid(args.Rfid);
+        }
+        public void OnStartCharge(object? sender, ChargingEventArgs args)
+        {
+            _state.StartCharge();   
+
+        }
+        public void OnStopCharge(object? sender, ChargingEventArgs args)
+        {
+            _state.StopCharge(args.);
+
+        }
+
+        public void OnLockDoor(object? sender, DoorEventArgs args)
+        {
+            IDoor.LockDoor(args.IsLocked);
+        }
+
+        public void OnUnlockDoor(object? sender, DoorEventArgs args)
+        {
+            IDoor.UnlockDoor();
+        }
+
+        public void ChangeState(StationStateBase state)
+        {
+            _state = state;
+            _display.SetStationText(_state.DisplayMessage);
+            StationStateChanged?.Invoke(this, new StationEventArgs()
+            { Id = _state.StateId, Message = _state.DisplayMessage });
+        }
+    }
+
+

@@ -1,4 +1,4 @@
-﻿namespace Cabinet_Library.Logger
+namespace Cabinet_Library.Logger
 {
     public class LogFile : ILogger
     {

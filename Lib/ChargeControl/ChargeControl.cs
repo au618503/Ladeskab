@@ -30,7 +30,7 @@ namespace Cabinet_Library.ChargeControl
         */
 
         IUsbCharger _charger;
-        private IDisplay _display;
+        public IDisplay _display;
         private StateBase _state;
         // Initial idea was to notify StationControl when state changes
         // This is unnecessary
@@ -81,5 +81,8 @@ namespace Cabinet_Library.ChargeControl
         {
             return _state.StateId;
         }
+
+     
+    }
     }
 }

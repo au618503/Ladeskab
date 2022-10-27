@@ -1,4 +1,5 @@
 ﻿using System;
+using static Cabinet_Library.Door;
 
 
 namespace Cabinet_Library
@@ -8,7 +9,7 @@ namespace Cabinet_Library
         public bool IsOpen { set; get; }
         public bool IsLocked { set; get; }
     }
-
+    //IDoor
     public interface IDoor
     {
         // Event triggered on door opened or closed
@@ -17,6 +18,7 @@ namespace Cabinet_Library
         // Direct access to the door status
         bool DoorIsOpen { get; }
         bool DoorIsLocked { get; }
+        int DoorClosedEvent { get; set; }
 
         void OnDoorOpen();
         void OnDoorClose();
@@ -26,14 +28,23 @@ namespace Cabinet_Library
 
     public class Door : IDoor
     {
+        
         public Door()
         {
             DoorIsOpen = false;
             DoorIsLocked = false;
         }
+
+        public enum Doorstate
+        {
+            Locked,
+            Unlocked
+        }
         public event EventHandler<DoorEventArgs> DoorEvent;
         public bool DoorIsOpen { get; private set; }
         public bool DoorIsLocked { get; private set; }
+        
+     
 
         public void OnDoorOpen()
         {
@@ -59,5 +70,7 @@ namespace Cabinet_Library
         {
             DoorEvent?.Invoke(this, new DoorEventArgs() { IsOpen = DoorIsOpen, IsLocked = DoorIsLocked });
         }
-    }
+      
+        
+        
 }
