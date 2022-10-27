@@ -21,6 +21,8 @@ namespace UnitTests.StationControlTests
         private IDoor _door = Substitute.For<IDoor>();
         private StationControl _uut;
         private IStationControl _stationControl = Substitute.For<IStationControl>();
+        
+        
         [SetUp]
         public void Setup()
         {
