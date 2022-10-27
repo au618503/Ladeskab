@@ -15,8 +15,10 @@ public interface IStationControl
 
     public void OnChargerError(object? sender, ChargingEventArgs args);
 
+    public void ChargingFinished();
 
     void LogDoorLocked(int id);
     void LogDoorUnlocked(int id);
     void ChangeState(StationStateBase state);
+    public void Reset();
 }

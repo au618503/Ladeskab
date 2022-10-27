@@ -12,12 +12,12 @@ public class DoorOpenedState : StationStateBase
     public DoorOpenedState(IStationControl context, IChargeControl chargeControl, IDisplay display, IDoor door, int? savedId) 
         : base(context, chargeControl, display, door, savedId)
     {
-        Display.Show(TextEnter);
+        Display.SetMainText(TextEnter);
     }
 
     public override void OnDoorClosed()
     {
-        Display.Show(TextLeave);
+        Display.SetMainText(TextLeave);
         Context.ChangeState(new AvailableState(Context, ChargeControl, Display, Door, SavedId));
     }
 }

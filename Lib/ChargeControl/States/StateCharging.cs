@@ -6,7 +6,7 @@ namespace Cabinet_Library.ChargeControl.States
     {
         private const StateID Id = StateID.CHARGING;
         private const string Message = "Charging...";
-        public StateCharging(IUsbCharger charger, ChargeControl context) : base(charger, context, Id)
+        public StateCharging(IUsbCharger charger, IChargeControl context) : base(charger, context, Id)
         {
             Charger.StartCharge();
             DisplayMessage = Message;
@@ -16,8 +16,7 @@ namespace Cabinet_Library.ChargeControl.States
             if (current > ThresholdError)
             {
                 StopCharge();
-                Context.ChangeState(new StateError(Charger, Context));
-                return;
+                Context.ChangeState(new StateError(Charger, Context, current));
             }
             else if (current < ThresholdCharging)
             {

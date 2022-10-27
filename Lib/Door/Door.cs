@@ -52,7 +52,7 @@ namespace Cabinet_Library.Door
         {
             if (!DoorIsOpen)
             {
-                DoorIsOpen = true;
+                DoorIsLocked = false;
             }
         }
     }

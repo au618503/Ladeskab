@@ -20,6 +20,7 @@ namespace Cabinet_Library.ChargeControl
 
         private bool _overload;
         private bool _charging;
+        private bool _batteryFullyCharged;
         private System.Timers.Timer _timer;
         private int _ticksSinceStart;
 
@@ -46,6 +47,10 @@ namespace Cabinet_Library.ChargeControl
                     double newValue = MaxCurrent -
                                       _ticksSinceStart * (MaxCurrent - FullyChargedCurrent) / (ChargeTimeMinutes * 60 * 1000 / CurrentTickInterval);
                     CurrentValue = Math.Max(newValue, FullyChargedCurrent);
+                    if (_batteryFullyCharged)
+                    {
+                        CurrentValue = FullyChargedCurrent;
+                    }
                 }
                 else if (Connected && _overload)
                 {
@@ -63,11 +68,17 @@ namespace Cabinet_Library.ChargeControl
         public void SimulateConnected(bool connected)
         {
             Connected = connected;
+            _batteryFullyCharged = false;
         }
 
         public void SimulateOverload(bool overload)
         {
             _overload = overload;
+        }
+
+        public void OnPhoneFullyCharged()
+        {
+            _batteryFullyCharged = true;
         }
 
         public void StartCharge()

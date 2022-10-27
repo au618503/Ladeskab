@@ -64,5 +64,16 @@ namespace Cabinet_Library.ChargeControl
         {
             return _state.StateId;
         }
+
+        // Reset the charger after an error has occured
+        public void Reset()
+        {
+            ChangeState(new StateReady(_charger, this));
+        }
+
+        public IUsbCharger GetCharger()
+        {
+            return _charger;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Cabinet_Library.ChargeControl;
+using Cabinet_Library.ChargeControl.States;
 using Cabinet_Library.Display;
 using Cabinet_Library.Door;
 
@@ -16,11 +17,14 @@ public class OccupiedState : StationStateBase
     {
         if (id == SavedId)
         {
-            ChargeControl.StopCharge();
             Door.UnlockDoor();
             Context.LogDoorUnlocked(id);
-            Display.Show("Remove your phone, peasant");
-            Context.ChangeState(new AvailableState(Context, ChargeControl, Display, Door, null));
+            Display.SetMainText("Remove your phone, peasant");
+            Context.ChargingFinished();
+        }
+        else
+        {
+            Display.SetMainText("Incorrect RFID!");
         }
     }
 }
