@@ -1,8 +1,9 @@
-﻿using Cabinet_Library;
-using Cabinet_Library.ChargeControl;
+﻿using Cabinet_Library.ChargeControl;
+using Cabinet_Library.Door;
 using Cabinet_Library.RfIdReader;
 using Cabinet_Library.StationControl;
 using System;
+using Cabinet_Library_StationControl;
 
 class Program
 {
@@ -12,7 +13,7 @@ class Program
         Door door = new Door();
         RfidReader rfidReader = new RfidReader();
         UsbChargerSimulator usbcharger = new UsbChargerSimulator();
-        StationControl _stationControl = new StationControl(door, usbcharger, rfidReader);
+        StationControl _stationControl = new StationControl();
 
         bool finish = false;
         do
@@ -29,11 +30,11 @@ class Program
                     break;
 
                 case 'O':
-                    door.OnDoorOpen();
+                    door.SimulateDoorOpened();
                     break;
 
                 case 'C':
-                    door.OnDoorClose();
+                    door.SimulateDoorClosed();
                     break;
                 case 'T':
                     usbcharger.SimulateConnected(true);

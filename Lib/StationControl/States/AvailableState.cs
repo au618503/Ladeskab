@@ -13,12 +13,15 @@ namespace Cabinet_Library.StationControl.States
         public override void OnDoorOpen()
         {
             Display.Show("Door opened");
-            Context.ChangeState();
+            Context.ChangeState(new StationStateBase());
       
         }
         public override void OnRfidDetected(int id)
         {
-            if(ChargeControl.IsConnected)
+            if (ChargeControl.DeviceConnected())
+            {
+                // Do something
+            }
         }
      
 

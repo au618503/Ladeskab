@@ -7,6 +7,7 @@ namespace Cabinet_Library.ChargeControl
     public class ChargeControl : IChargeControl
     {
         #region Publisher
+
         /*
          * IPublisher<ChargingEventArgs> implementation
          *
@@ -22,6 +23,7 @@ namespace Cabinet_Library.ChargeControl
         {
             ChargingStateChanged -= callback;
         }*/
+
         #endregion
 
         /* Controls charging via State pattern
@@ -31,6 +33,7 @@ namespace Cabinet_Library.ChargeControl
 
         IUsbCharger _charger;
         public IDisplay _display;
+
         private StateBase _state;
         // Initial idea was to notify StationControl when state changes
         // This is unnecessary
@@ -67,7 +70,7 @@ namespace Cabinet_Library.ChargeControl
         {
             _state.StopCharge();
         }
-        
+
         // Display needs to be notified when state is changed, but this can be done via a single method
         public void ChangeState(StateBase state)
         {
@@ -81,8 +84,5 @@ namespace Cabinet_Library.ChargeControl
         {
             return _state.StateId;
         }
-
-     
-    }
     }
 }

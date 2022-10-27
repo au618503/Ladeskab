@@ -1,4 +1,6 @@
-﻿namespace Cabinet_Library.StationControl;
+﻿using Cabinet_Library.StationControl.States;
+
+namespace Cabinet_Library.StationControl;
 
 // What should StationControl do on ChargingEvent ????
 // StationControl is the transisition between states, so it should be the one to call the state change.
@@ -8,4 +10,5 @@ public interface IStationControl
     void OnDoorClosed();
     void OnChargerError();
     void OnRfidDetected(int id);
+    void ChangeState(StationStateBase state);
 }

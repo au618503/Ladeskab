@@ -3,11 +3,5 @@
     public class IRfidDetectedEventArgs
     {
         public int Rfid { set; get; }
-
-      
-        {
-        
-            
-        }
     }
 }

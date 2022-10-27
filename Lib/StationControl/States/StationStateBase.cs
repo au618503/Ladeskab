@@ -1,5 +1,6 @@
 ﻿using Cabinet_Library.ChargeControl;
 using Cabinet_Library.Display;
+using Cabinet_Library.Door;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Cabinet_Library.StationControl.States
         public virtual void OnDoorOpen() { }
         public virtual void OnDoorClosed() { }
 
-        public void OnRfidDetected(int id) { }
+        public virtual void OnRfidDetected(int id) { }
         
         
         
