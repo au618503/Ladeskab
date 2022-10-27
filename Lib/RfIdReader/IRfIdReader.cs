@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Cabinet_Library.RfIdReader
 {
-    internal interface IRfIdReader
+    public interface IRfIdReader
     {
-         
+        event EventHandler<RfidEventArgs> RfidEvent;
     }
 }

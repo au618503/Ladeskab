@@ -17,15 +17,24 @@ namespace Cabinet_Library.StationControl.States
         protected IChargeControl ChargeControl;
         protected IDisplay Display;
         protected IDoor Door;
-        
-        
-        public virtual void OnDoorOpen() { }
+        protected int? SavedId = null;
+        public virtual void OnDoorOpened() { }
         public virtual void OnDoorClosed() { }
-
         public virtual void OnRfidDetected(int id) { }
+
+        public StationStateBase(IStationControl context, IChargeControl chargeControl, IDisplay display, IDoor door, int? savedId)
+        {
+            Context = context;
+            ChargeControl = chargeControl;
+            Display = display;
+            Door = door;
+            SavedId = savedId;
+        }
+
         
-        
-        
+
+
+
         //         . Systemet aflæser RFID - tagget.Hvis RFID er identisk med det, der blev brugt til at låse skabet med, stoppes opladning, ladeskabets låge låses op og oplåsningen logges.
 //9.Brugeren åbner ladeskabet, fjerner ladekablet fra sin telefon og tager telefonen
     }

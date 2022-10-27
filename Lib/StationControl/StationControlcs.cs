@@ -10,6 +10,7 @@ using Cabinet_Library;
 using System.Runtime.InteropServices;
 using Cabinet_Library.ObserverPattern;
 using Cabinet_Library.Display;
+using Cabinet_Library.Door;
 using Cabinet_Library.StationControl;
 using Cabinet_Library.StationControl.States;
 using Cabinet_Library.Logger;
@@ -17,91 +18,71 @@ using Cabinet_Library.RfIdReader;
 
 namespace Cabinet_Library_StationControl
 {
-    public class StationControl
+    public class StationControl : IStationControl
     {
+        private IDoor _door;
+        private IDisplay _display;
+        private IChargeControl _chargeControl;
+        private IRfIdReader _rfid;
+        private ILogger _logFile;
+        private StationStateBase _state;
+
+        #region EventHandlers
+
+        //events for door and rdif
+
+        public void OnRfidEvent(object? sender, RfidEventArgs args)
+        {
+            int id = args.Rfid;
+            _state.OnRfidDetected(id);
+        }
+
+        public void OnDoorEvent(object? sender, DoorEventArgs args)
+        {
+            if (args.IsOpen)
+            {
+                _state.OnDoorOpened();
+            }
+            else
+            {
+                _state.OnDoorClosed();
+            }
+        }
+
+        public void OnChargerError(object? sender, ChargingEventArgs args)
+        {
+            _logFile.LogChargingError(args.Current);
+        }
+
+        #endregion
+
+
+        public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl, IRfIdReader rfidReader,
+            ILogger logFile)
+        {
+            rfidReader.RfidEvent += OnRfidEvent;
+            _door = door;
+            _door.DoorEvent += OnDoorEvent;
+            _display = display;
+            _chargeControl = chargeControl;
+            _logFile = logFile;
+            _state = new AvailableState(this, _chargeControl, _display, _door, null);
+
+        }
+        public void ChangeState(StationStateBase state)
+        {
+            _state = state;
+        }
+
+        public void LogDoorLocked(int id)
+        {
+            _logFile.LogDoorLocked(id);
+        }
+        public void LogDoorUnlocked(int id)
+        {
+            _logFile.LogDoorUnlocked(id);
+        }
     }
 }
-/*;
-    {
-          #region Events 
-          //events for door and rdif
-
-       public void OnRfidEvent(RfidEventArgs e, object RfidDetectedEventDetected)
-      {
-        int id = e.Rfid;
-        _state.OnRfidDetected(id);
-       }
-
-
-       public void HandleDoorEvent(object sender, DoorEventArgs e)
-{
-    Doorevent = e.DoorEvent;
-    OnNewDoorStatús.Inwoke(this, new);
-    return Doorevent;
-}
-
-         #endregion
-         
-    private IDoor _door;
-    private IDisplay _display;
-    private IChargeControl _chargeControl;
-    private IRfIdReader _rfid;
-    private ILogger _logFile;
-    private StationStateBase _state;
-
-    public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl, IRFIDReader rfidReader, ILogFile logFile)
-    {
-    
-    }
-
-    public void OnDoorEvent(object? sender, DoorEventArgs args)
-    {
-    if (args.IsOpen) 
-    {
-        _state.OnDoorOpen();
-    }
-    else{
-        _state.OnDoorClose();
-    }
-  }
-
-    public void OnChargeEvent(object? sender, ChargingEventArgs args)
-    {
-        _state.MonitorChargeState(args.Id, args.Message);
-    }
-
-    public void OnRfidEvent(object? sender, RfidEventArgs args)
-    {
-        object value = _state.CheckRfid(args.Rfid);
-    }
-    public void OnStartCharge(object? sender, ChargingEventArgs args)
-    {
-        _state.StartCharge();   
-
-    }
-    public void OnStopCharge(object? sender, ChargingEventArgs args)
-    {
-        _state.StopCharge(args.);
-
-    }
-
-    public void OnLockDoor(object? sender, DoorEventArgs args)
-    {
-        IDoor.LockDoor(args.IsLocked);
-    }
-
-    public void OnUnlockDoor(object? sender, DoorEventArgs args)
-    {
-        IDoor.UnlockDoor();
-    }
-
-    public void ChangeState(StationStateBase state)
-    {
-        _state = state;
-        _display.SetStationText(_state.DisplayMessage);
-        StationStateChanged?.Invoke(this, new StationEventArgs()
-        { Id = _state.StateId, Message = _state.DisplayMessage });
-    }
-}*/
 
 

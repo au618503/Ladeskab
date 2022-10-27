@@ -2,21 +2,8 @@
 
 namespace Cabinet_Library.RfIdReader
 {
-    public class RfidEventArgs : EventArgs
-    {
-        public int Rfid { set; get; }
-    }
 
-    public interface IRfid
-    {
-        event EventHandler<RfidEventArgs> RfidEvent;
-
-        int RfidRead { get; }
-
-        void OnRfidRead(int id);
-    }
-
-    public class RfidReader : IRfid
+    public class RfidReader : IRfIdReader
     {
         public event EventHandler<RfidEventArgs> RfidEvent;
         public int RfidRead { get; private set; }
