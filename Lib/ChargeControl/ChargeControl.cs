@@ -64,5 +64,8 @@ namespace Cabinet_Library.ChargeControl
         {
             return _state.StateId;
         }
+
+     
+    }
     }
 }

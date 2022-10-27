@@ -1,4 +1,5 @@
 ﻿using System;
+using static Cabinet_Library.Door;
 
 
 namespace Cabinet_Library
@@ -43,7 +44,7 @@ namespace Cabinet_Library
         public bool DoorIsOpen { get; private set; }
         public bool DoorIsLocked { get; private set; }
         
-        public void SetDoorState(Doorstate new Doorstate);
+     
 
         public void OnDoorOpen()
         {
@@ -69,5 +70,19 @@ namespace Cabinet_Library
         {
             DoorEvent?.Invoke(this, new DoorEventArgs() { IsOpen = DoorIsOpen, IsLocked = DoorIsLocked });
         }
-    }
+        private void ChangeDoorState(Door door)
+        {
+            if (_doorEvent == DoorState.Unlocked)
+            {
+                DoorOpened();
+
+            }
+            else
+            {
+                DoorClosed();
+
+            }
+        }
+        
+        
 }

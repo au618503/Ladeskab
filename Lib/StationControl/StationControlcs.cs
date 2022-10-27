@@ -45,7 +45,7 @@ namespace Cabinet_Library.StationControl
     public StationControl(IDoor door, IUsbCharger charger, IRfid rfid, LogFile logfile, IDisplay display)
     {
         var door;
-        door.DoorOpenedEvent += HandleDoorOpenedEvent;
+        door.DoorOpenedEvent += ChangeDoorState();
 
         _charger = charger;
         _chargeControl = new ChargeControl.ChargeControl(charger, display);
@@ -76,6 +76,7 @@ namespace Cabinet_Library.StationControl
     {
         Doorevent = e.DoorEvent;
         OnNewDoorStatús.Inwoke(this, new);
+        return Doorevent;
     }
 
     #endregion
@@ -83,7 +84,7 @@ namespace Cabinet_Library.StationControl
     private void Acces(int id)
     {
         //Checks for powerconnection
-        if (!IsNotConected())
+        if (_charger==0))
         {
             _display.DisplayMessage("Phone is not connected");
 
@@ -93,7 +94,7 @@ namespace Cabinet_Library.StationControl
             _charger.StartCharge();
             _door.LockDoor();
             _display.DisplayMessage("Door is locked");
-            _state = CabinetState.Locked;
+            _state = Door.DoorIsLocked;
             _oldId = id;
             _logfile.LogDoorLocked(id.ToString());
             _display.Rfid();
@@ -101,18 +102,7 @@ namespace Cabinet_Library.StationControl
         }
     }
     
-    private void ChangeDoorState(Door door)
-    {
-        if (_doorEvent == DoorState.Unlocked)
-        {
-            DoorOpened();
-            
-        }
-        else
-        {
-            DoorClosed();
-           
-        }
+  
     }
 
   
