@@ -59,14 +59,14 @@ namespace Cabinet_Library.StationControl
                 case LadeskabState.Available:
                     if (e.IsOpen && !e.IsLocked)
                     {
-                        _display.Vis("Tilslut telefon");
+                        _display.Show("Tilslut telefon");
                         _state = LadeskabState.DoorOpen;
                     }
                     break;
                 case LadeskabState.DoorOpen:
                     if (!e.IsOpen && !e.IsLocked)
                     {
-                        _display.Vis("Indlæs RFID");
+                        _display.Show("Indlæs RFID");
                         _state = LadeskabState.Available;
                     }
                     break;
@@ -75,10 +75,7 @@ namespace Cabinet_Library.StationControl
                     break;
             }
         }
-
-        private void HandleChargeCurrent(object sender, CurrentEventArgs e)
-        {
-        }
+        
 
         private void HandleRfidDetected(object sender, RfidEventArgs e)
         {
@@ -104,13 +101,13 @@ namespace Cabinet_Library.StationControl
                         }
 
                         Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
-                        _display.Vis("Ladeskab optaget");
+                        _display.Show("Ladeskab optaget");
                         _state = LadeskabState.Locked;
                     }
                     else
                     {
                         Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
-                        _display.Vis("Tilslutningsfejl");
+                        _display.Show("Tilslutningsfejl");
                     }
 
                     break;
@@ -131,13 +128,13 @@ namespace Cabinet_Library.StationControl
                         }
 
                         Console.WriteLine("Tag din telefon ud af skabet og luk døren");
-                        _display.Vis("Fjern telefon");
+                        _display.Show("Fjern telefon");
                         _state = LadeskabState.Available;
                     }
                     else
                     {
                         Console.WriteLine("Forkert RFID tag");
-                        _display.Vis("RFID fejl");
+                        _display.Show("RFID fejl");
                     }
 
                     break;

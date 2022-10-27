@@ -2,13 +2,15 @@
 
 namespace Cabinet_Library.Display
 {
-    public class Display
+    public class Display : IDisplay
     {
-        private string _chargingText = "";
-        public void Vis(string Tekst)
+        public string _chargingText { get; set; }
+        public string _stateText { get; set; }
+        //private string _chargingText = "";
+        public void Show(string Text)
         {
-            // skrives ud på display, printf, hvad den bliver bedt om.
-            Console.WriteLine(Tekst);
+            _stateText = Text;
+            Console.WriteLine(_stateText);
             Console.Write("\n");
             Console.WriteLine(_chargingText);
         }

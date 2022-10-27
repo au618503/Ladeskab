@@ -8,6 +8,7 @@ public class StateFullyCharged : StateBase
     private const string Message = "Device fully charged.";
     public StateFullyCharged(IUsbCharger charger, ChargeControl context) : base(charger, context, Id)
     {
+        StopCharge();
         DisplayMessage = Message; ;
     }
 
