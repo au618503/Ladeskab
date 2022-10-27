@@ -57,7 +57,7 @@ namespace Cabinet_Library.ChargeControl
 
         public void OnError(double current)
         {
-            ErrorEvent.Invoke(this, new ChargingEventArgs(){Current = current});
+            ErrorEvent?.Invoke(this, new ChargingEventArgs(){Current = current});
         }
 
         public StateID GetState()

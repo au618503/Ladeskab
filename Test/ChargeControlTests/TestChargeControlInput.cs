@@ -24,6 +24,7 @@ namespace UnitTests.ChargeControlTests
             _usbCharger = Substitute.For<IUsbCharger>();
             //_display = new Display();
             _uut = new ChargeControl(_usbCharger, _display);
+            _usbCharger.CurrentValueEvent += _uut.OnCurrentEvent;
         }
 
         [Test]
