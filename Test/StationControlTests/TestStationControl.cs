@@ -55,9 +55,18 @@ namespace UnitTests.StationControlTests
             Assert.That(_door.DoorIsOpen, Is.EqualTo(false));
         }
 
+        [Test]
+        public void TestStationControl_ChangeState()
+
+        {
+           
+            
+            _uut.ChangeState(new AvailableState(_uut, _door, _chargeControl, _display, _log, _rfidReader));
+            Assert.That(_uut._state, Is.EqualTo(new AvailableState(_uut, _door, _chargeControl, _display, _log, _rfidReader)));
+        }
 
 
-    }
+}
 
 }
 
