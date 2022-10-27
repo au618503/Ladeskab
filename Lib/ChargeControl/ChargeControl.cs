@@ -55,7 +55,7 @@ namespace Cabinet_Library.ChargeControl
             _display.SetChargingText(_state.DisplayMessage);
         }
 
-        public void OnError(int current)
+        public void OnError(double current)
         {
             ErrorEvent.Invoke(this, new ChargingEventArgs(){Current = current});
         }

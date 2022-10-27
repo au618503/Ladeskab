@@ -7,6 +7,7 @@ public class StateError : StateBase
     private const string Message = "Charging error. Contact support.";
     public StateError(IUsbCharger charger, ChargeControl context) : base(charger, context, Id)
     {
+        Context.OnError(charger.CurrentValue);
         Charging = false;
         DisplayMessage = Message;
     }

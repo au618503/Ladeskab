@@ -51,6 +51,7 @@ namespace Cabinet_Library_StationControl
 
         public void OnChargerError(object? sender, ChargingEventArgs args)
         {
+            _display.Show($"Error, current too high ({args.Current})");
             _logFile.LogChargingError(args.Current);
         }
 

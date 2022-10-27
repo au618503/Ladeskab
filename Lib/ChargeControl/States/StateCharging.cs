@@ -17,6 +17,7 @@ namespace Cabinet_Library.ChargeControl.States
             {
                 StopCharge();
                 Context.ChangeState(new StateError(Charger, Context));
+                return;
             }
             else if (current < ThresholdCharging)
             {
