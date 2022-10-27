@@ -70,19 +70,7 @@ namespace Cabinet_Library
         {
             DoorEvent?.Invoke(this, new DoorEventArgs() { IsOpen = DoorIsOpen, IsLocked = DoorIsLocked });
         }
-        private void ChangeDoorState(Door door)
-        {
-            if (_doorEvent == DoorState.Unlocked)
-            {
-                DoorOpened();
-
-            }
-            else
-            {
-                DoorClosed();
-
-            }
-        }
+      
         
         
 }

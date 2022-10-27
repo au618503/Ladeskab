@@ -2,6 +2,7 @@
 using Cabinet_Library;
 using Cabinet_Library.StationControl;
 using Cabinet_Library.ChargeControl;
+using Cabinet_Library.RfIdReader;
 
 class Program
 {

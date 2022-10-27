@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cabinet_Library
+namespace Cabinet_Library.RfIdReader
 {
     public class RfidEventArgs : EventArgs
     {

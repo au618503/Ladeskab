@@ -1,6 +1,13 @@
 ﻿namespace Cabinet_Library.StationControl
 {
-    public interface IRfidDetectedEventArgs
+    public class IRfidDetectedEventArgs
     {
+        public int Rfid { set; get; }
+
+      
+        {
+        
+            
+        }
     }
 }

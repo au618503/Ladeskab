@@ -1,41 +1,32 @@
 ﻿
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using Cabinet_Library.ChargeControl;
-    using Cabinet_Library;
-    using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Cabinet_Library.ChargeControl;
+using Cabinet_Library;
+using System.Runtime.InteropServices;
 using Cabinet_Library.ObserverPattern;
 using Cabinet_Library.Display;
+using Cabinet_Library.StationControl;
+using Cabinet_Library.StationControl.States;
+using Cabinet_Library.Logger;
+using Cabinet_Library.RfIdReader;
 
 namespace Cabinet_Library_StationControl
-    {
-        public class StationControl : IPublisher<EventArgs>
+{
+    public class StationControl : IStationControl 
         {
-              #region Publisher
-
-           public void AddListener(IObserver observer, EventHandler<StationEventArgs> callback)
-        {
-            StationStateChanged += callback;
-        }
-
-          public void RemoveListener(EventHandler<StationEventArgs> callback)
-        {
-            StationStateChanged -= callback;
-        }
-              #endregion
-
               #region Events 
               //events for door and rdif
 
            public void OnRfidEvent(RfidEventArgs e, object RfidDetectedEventDetected)
           {
-              RfidEvent = e.RfidDetected;
-              RfidEvent?.Invoke(this, new);
-          }
+            int id = e.Rfid;
+            _state.OnRfidDetected(id);
+           }
 
 
            public void HandleDoorEvent(object sender, DoorEventArgs e)
@@ -49,20 +40,26 @@ namespace Cabinet_Library_StationControl
 
         public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl, IRFIDReader rfidReader, ILogFile logFile)
         {
-              private IDoor _door;
+        private IDoor _door;
         private IDisplay _display;
         private IChargeControl _chargeControl;
-        private IRFIDReader _rfidReader;
-        private ILogFile _logFile;
-        private StateBase _state;
-        public event EventHandler<StationEventArgs> StationStateChanged;
+        private IRfIdReader _rfid;
+        private ILogger _logFile;
+        private StationStateBase _state;
+        public event EventHandler<StationStateBaseArgs> StationStateChanged;
         public event EventHandler<DoorHandlerArgs> DoorStateChanged;
         }
 
         public void OnDoorEvent(object? sender, DoorEventArgs args)
         {
-            _state.MonitorDoorState(args.IsOpen, args.IsLocked);
+        if (args.IsOpen) 
+        {
+            _state.OnDoorOpen();
+        }''
+        else{
+            _state.OnDoorClose();
         }
+    }
 
         public void OnChargeEvent(object? sender, ChargingEventArgs args)
         {
@@ -71,7 +68,7 @@ namespace Cabinet_Library_StationControl
 
         public void OnRfidEvent(object? sender, RfidEventArgs args)
         {
-            object value = _state.MonitorRfidState(args.Rfid);
+            object value = _state.CheckRfid(args.Rfid);
         }
 
         public void OnStartCharge(object? sender, ChargingEventArgs args)
@@ -95,7 +92,7 @@ namespace Cabinet_Library_StationControl
             IDoor.UnlockDoor();
         }
 
-        public void OnChangeState(StateBase state)
+        public void ChangeState(StationStateBase state)
         {
             _state = state;
             _display.SetStationText(_state.DisplayMessage);
