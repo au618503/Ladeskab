@@ -14,40 +14,51 @@ using Cabinet_Library.StationControl.States;
 using Cabinet_Library.Logger;
 using Cabinet_Library.RfIdReader;
 
+
 namespace UnitTests.StationControlTests
 {
     public class TestStationControl
-        
     {
-        private DoorEventArgs _dooreventargs;
-        private IDoor _uut;
+
+        private readonly StationControl _uut;
+        private IDoor _door;
+        private IChargeControl _chargeControl;
+        private IDisplay _display;
+        private ILogger _log;
+        private IRfIdReader _rfidReader;
+
 
         [SetUp]
         public void Setup()
         {
+            _door = Substitute.For<IDoor>();
+            _chargeControl = Substitute.For<IChargeControl>();
+            _display = Substitute.For<IDisplay>();
+            _rfidReader = Substitute.For<IRfIdReader>();
+            //_uut = new StationControl(IChargeControl chargeControl, IDisplay display, IDoor door, IStationControl stationControl);
 
-            //SetUp for Door
-            _uut = Substitute.For<IDoor>();
-            _dooreventargs = new DoorEventArgs() { IsOpen = true };
 
-
-            //setUp for RfID
-            IRfIdReader _rfid = Substitute.For<IRfIdReader>();
         }
 
         [Test]
-        public void TestDoor_IsOpen()
+        public void TestStationControl_DoorOpen_true()
         {
-            _uut.DoorEvent += Raise.EventWith(_dooreventargs);
-            _uut.DoorIsOpen.Returns(true);
+            _door.DoorIsOpen.Returns(true);
 
-            Assert.That(_uut.DoorIsOpen, Is.EqualTo(true));
-
+            Assert.That(_door.DoorIsOpen, Is.EqualTo(true));
         }
-        
-        
+        [Test]
+        public void TestStationControl_DoorOpen_false()
+        {
+            _door.DoorIsOpen.Returns(false);
+
+            Assert.That(_door.DoorIsOpen, Is.EqualTo(false));
+        }
 
 
 
-  
+    }
+
 }
+
+    

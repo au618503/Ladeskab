@@ -23,7 +23,7 @@ namespace Cabinet_Library_StationControl
         private IDoor _door;
         private IDisplay _display;
         private IChargeControl _chargeControl;
-        private IRfIdReader _rfid;
+       // private IRfIdReader _rfid;
         private ILogger _logFile;
         private StationStateBase _state;
 
@@ -74,6 +74,10 @@ namespace Cabinet_Library_StationControl
 
         public StationControl(IChargeControl chargeControl, IDisplay display, IDoor door, IStationControl stationControl)
         {
+            _chargeControl = chargeControl;
+            _display = display;
+            _door = door;
+            _state = new AvailableState(this, _chargeControl, _display, _door, null);
         }
 
         public void ChangeState(StationStateBase state)
