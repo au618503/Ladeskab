@@ -14,7 +14,7 @@ namespace App
         private ConsoleColor _batLow = ConsoleColor.Red;
         private ConsoleColor _batMed = ConsoleColor.Yellow;
         private ConsoleColor _batHigh = ConsoleColor.Green;
-        private readonly int _noLines = 6;
+        private readonly int _noLines = 8;
 
         public void DisplayUI(Display display, double BatteryLevel)
         {
@@ -32,6 +32,10 @@ namespace App
                 Console.ForegroundColor = _batLow;
                 Console.WriteLine(display.ChargingText);
                 Console.ForegroundColor = _defaultColor;
+            }
+            else
+            {
+                Console.WriteLine(display.ChargingText);
             }
         }
 
