@@ -41,22 +41,29 @@ namespace UnitTests.StationControlTests
 
         }
         #region TestDoor
-        [Test]
+        //[Test]
         // ACT and ASSERT
+        //public void TestStationControl_DoorOpen_true()
+        //{
+            
+        //    //Setup the stub with resired response
+        //    _door.DoorEvent += Raise.EventWith(new DoorEventArgs() { IsOpen =  true});
+
+        //    //_door.DoorIsOpen = true;
+        //    //_door.DoorEvent.Invoke(this, new DoorEventArgs() { IsOpen = DoorIsOpen });
+
+        //    //_door.DoorIsOpen = true;
+            
+        //    ////assert that doorOpen is called correct
+        //    Assert.That(_uut., Is.EqualTo(true));
+        //}
+        [Test]
+        //PASSED
         public void TestStationControl_DoorOpen_true()
         {
-            //Setup the stub with resired response
-            _door.DoorEvent += Raise.EventWith(new DoorEventArgs() { IsOpen =  true});
-            _door.DoorIsOpen = true;
-            //assert that doorOpen is called correct
-            Assert.That(_door.DoorIsOpen, Is.EqualTo(DoorOpenedState));
-        }
-        [Test]
-        public void TestStationControl_DoorOpen_false()
-        {
-            _door.DoorEvent += Raise.EventWith(new DoorEventArgs() { IsOpen = false });
+            _door.DoorEvent += Raise.EventWith(new DoorEventArgs() { IsOpen = true });
 
-            Assert.That(_door.DoorIsOpen, Is.EqualTo(false));
+            Assert.That(_door.DoorIsOpen, Is.EqualTo(true));
         }
 
         #endregion
@@ -65,7 +72,7 @@ namespace UnitTests.StationControlTests
         [Test]
         public void TestStationControl_RFIDDetected()
         {
-            _rfid.RfidEvent += Raise.EventWith(new RfidEventArgs { rfid = 1 });
+            _rfid.RfidEvent += Raise.EventWith(new RfidEventArgs { Rfid = 1 });
 
             Assert.That(_rfidReader, Is.EqualTo(_rfid));
         }
