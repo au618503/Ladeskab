@@ -1,6 +1,5 @@
 ﻿using Cabinet_Library.ChargeControl.States;
 using Cabinet_Library.Display;
-using Cabinet_Library.ObserverPattern;
 
 namespace Cabinet_Library.ChargeControl
 {

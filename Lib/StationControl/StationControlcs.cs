@@ -9,7 +9,6 @@ using Cabinet_Library.ChargeControl;
 using Cabinet_Library;
 using System.Runtime.InteropServices;
 using Cabinet_Library.ChargeControl.States;
-using Cabinet_Library.ObserverPattern;
 using Cabinet_Library.Display;
 using Cabinet_Library.Door;
 using Cabinet_Library.StationControl;

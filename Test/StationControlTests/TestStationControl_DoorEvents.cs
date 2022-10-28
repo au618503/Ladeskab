@@ -38,4 +38,26 @@ public class TestStationControl_DoorEvents
         _logFile = Substitute.For<ILogger>();
         _uut = new StationControl(_door, _display, _chargeControl, _rfidReader, _logFile);
     }
+
+    [Test]
+    public void DefaultStateIsAvailable()
+    {
+        Assert.IsTrue(_uut.GetState().StateID == StationStateID.AVAILABLE);
+    }
+
+    [Test]
+    public void StateAvailable_DoorOpens_ChangedState()
+    {
+        _door.DoorEvent += Raise.EventWith(_door, new DoorEventArgs() { IsOpen = true});
+        Assert.IsTrue(_uut.GetState().StateID == StationStateID.DOOROPEN); 
+    }
+
+    [Test]
+    public void StateAvailable_DoorOpens_ThenCloses_StateIsAvailable()
+    {
+        _door.DoorEvent += Raise.EventWith(_door, new DoorEventArgs() { IsOpen = true });
+        _door.DoorEvent += Raise.EventWith(_door, new DoorEventArgs() { IsOpen = false });
+        Assert.IsTrue(_uut.GetState().StateID == StationStateID.AVAILABLE);
+    }
+
 }
