@@ -53,7 +53,7 @@ namespace UnitTests.StationControlTests
         }
 
         [Test]
-        publikc private void TestLogDoor()
+        public private void TestLogDoor()
         {
             TestLogDoor(_logFile);
         }
