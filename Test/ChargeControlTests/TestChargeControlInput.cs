@@ -65,7 +65,7 @@ namespace UnitTests.ChargeControlTests
             //Assert.That(_display.SetChargingText(),Does.Contain("Test"));
             //Assert.That(_display._stateText, Does.Contain("Test"));
         }
-        
+
         [Test]
         public void TestCharging_StateIsFullyCharged()
         {

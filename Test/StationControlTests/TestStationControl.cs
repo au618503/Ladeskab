@@ -35,18 +35,17 @@ namespace UnitTests.StationControlTests
         public void Setup()
         {
             _door = Substitute.For<IDoor>();
-           // _chargeControl = Substitute.For<IChargeControl>();
+            _chargeControl = Substitute.For<IChargeControl>();
             _display = Substitute.For<IDisplay>();
             _rfidReader = Substitute.For<IRfIdReader>();
-            _state = Substitute.For<StationStateBase>();
             _logFile = Substitute.For<ILogger>();
             _uut = new StationControl(_door, _display, _chargeControl, _rfidReader, _logFile);
 
         }
-       
 
 
-        void TestLogDoor(ILogger _logFile)
+        [Test]
+        public void TestLogDoor()
         {
             _uut.LogDoorLocked(1);
             _logFile.Received().LogDoorLocked(1);
@@ -59,6 +58,16 @@ namespace UnitTests.StationControlTests
             _uut.LogDoorUnlocked(1);
             _logFile.Received().LogDoorUnlocked(1);
             
+        }
+        
+        [Test]
+        public void RfidDetected()
+        {
+
+            _uut.RfidEvent.Inwoke(this, new RfidEventArgs() { Rfid = 1 });
+            
+            _rfid.RfidEvent += Raise.EventWith(this, new RfidEventArgs() { Rfid=1});
+
         }
 
 
@@ -80,7 +89,7 @@ namespace UnitTests.StationControlTests
         //    ////assert that doorOpen is called correct
         //    Assert.That(_uut., Is.EqualTo(true));
         //}
-        #endregion
+
         //[Test]
         //PASSED
         //public void TestStationControl_LogDoorLocked()
@@ -94,7 +103,7 @@ namespace UnitTests.StationControlTests
         //    Assert.That(actual: _uut., Is.EqualTo(,IsOpen));
         //}
 
-        
+
 
 
         //[Test]
