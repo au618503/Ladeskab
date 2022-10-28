@@ -26,6 +26,7 @@ namespace UnitTests.StationControlTests
         private IDisplay _display;
         private ILogger? _logFile;
         private IRfIdReader _rfidReader;
+        private IRfIdReader _rfid;
 
 
         [SetUp]
@@ -59,14 +60,17 @@ namespace UnitTests.StationControlTests
         }
 
         #endregion
-        
+
+
         [Test]
-        public void TestStationControl_ChangeState
+        public void TestStationControl_RFIDDetected()
+        {
+            _rfid.RfidEvent += Raise.EventWith(new RfidEventArgs { Rfid = 1 });
 
-        //[Test]
-        //public void TestStationControl_ChangeState()
+            Assert.That(_rfidReader, Is.EqualTo(_rfid));
+        }
 
-        //{
+
 
 
         //    _uut.ChangeState(new AvailableState(_uut, _door, _chargeControl, _display, _log, _rfidReader));
