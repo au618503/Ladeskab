@@ -1,4 +1,4 @@
-﻿using Cabinet_Library.ChargeControl;
+using Cabinet_Library.ChargeControl;
 using Cabinet_Library.Door;
 using Cabinet_Library.RfIdReader;
 using Cabinet_Library.StationControl.States;

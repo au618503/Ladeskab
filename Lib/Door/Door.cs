@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using static Cabinet_Library.Door.Door;
 
 
@@ -56,4 +56,5 @@ namespace Cabinet_Library.Door
             }
         }
     }
+    
 }
