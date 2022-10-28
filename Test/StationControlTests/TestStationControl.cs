@@ -20,53 +20,61 @@ namespace UnitTests.StationControlTests
     public class TestStationControl
     {
 
-        private readonly StationControl _uut;
+        private  StationControl _uut;
         private IDoor _door;
         private IChargeControl _chargeControl;
         private IDisplay _display;
-        private ILogger _log;
+        private ILogger? _logFile;
         private IRfIdReader _rfidReader;
 
 
         [SetUp]
+        //Arrange
         public void Setup()
         {
             _door = Substitute.For<IDoor>();
             _chargeControl = Substitute.For<IChargeControl>();
             _display = Substitute.For<IDisplay>();
             _rfidReader = Substitute.For<IRfIdReader>();
-            //_uut = new StationControl(IChargeControl chargeControl, IDisplay display, IDoor door, IStationControl stationControl);
-
+            _uut = new StationControl(_door, _display, _chargeControl, _rfidReader, _logFile);
 
         }
-
+        #region TestDoor
         [Test]
+        // ACT and ASSERT
         public void TestStationControl_DoorOpen_true()
         {
-            _door.DoorIsOpen.Returns(true);
+            //Setup the stub with resired response
+            _door.DoorEvent += Raise.EventWith(new DoorEventArgs() { IsOpen =  true});
 
+            //assert that doorOpen is called correct
             Assert.That(_door.DoorIsOpen, Is.EqualTo(true));
         }
         [Test]
         public void TestStationControl_DoorOpen_false()
         {
-            _door.DoorIsOpen.Returns(false);
+            _door.DoorEvent += Raise.EventWith(new DoorEventArgs() { IsOpen = false });
 
             Assert.That(_door.DoorIsOpen, Is.EqualTo(false));
         }
 
+        #endregion
+        
         [Test]
-        public void TestStationControl_ChangeState()
+        public void TestStationControl_ChangeState
 
-        {
-           
-            
-            _uut.ChangeState(new AvailableState(_uut, _door, _chargeControl, _display, _log, _rfidReader));
-            Assert.That(_uut._state, Is.EqualTo(new AvailableState(_uut, _door, _chargeControl, _display, _log, _rfidReader)));
-        }
+        //[Test]
+        //public void TestStationControl_ChangeState()
+
+        //{
 
 
-}
+        //    _uut.ChangeState(new AvailableState(_uut, _door, _chargeControl, _display, _log, _rfidReader));
+        //    Assert.That(_uut._state, Is.EqualTo(new AvailableState(_uut, _door, _chargeControl, _display, _log, _rfidReader)));
+        //}
+
+
+    }
 
 }
 
