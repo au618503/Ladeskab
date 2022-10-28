@@ -84,8 +84,8 @@ namespace UnitTests.TestDoor
         {
             _uut.UnlockDoor();
             _uut.SimulateDoorClosed();
-            Assert.That(_uut.UnlockDoor, Is.True);
             Assert.That(_uut.DoorIsLocked, Is.True);
+            Assert.That(_uut.SimulateDoorClosed, Is.True);
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace UnitTests.TestDoor
         {
             _uut.LockDoor();
             _uut.SimulateDoorClosed();
-            Assert.That(_uut.LockDoor, Is.True);
+            Assert.That(_uut.DoorIsLocked, Is.True);
             Assert.That(_uut.SimulateDoorClosed, Is.True);
         }
     }
