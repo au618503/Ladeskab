@@ -23,7 +23,7 @@ namespace App
             Console.Write("Door: " + DoorOpen + ", " + DoorLocked + "    " + "Connected: " + Connected + "\n");
             Console.Write("Phone battery level: ");
             Console.ForegroundColor = ChooseColor(BatteryLevel);
-            Console.Write(BatteryLevel + "%\n");
+            Console.Write(BatteryLevel.ToString("N2") + "%\n");
             Console.ForegroundColor = _defaultColor;
             Console.Write("Display: \n");
             Console.WriteLine(display.MainText + "\n");
