@@ -8,6 +8,7 @@ enum StateID{
 }
 
 class ChargeControl{
+    + event EventHandler<ChargingEventArgs> ErrorEvent
     - BaseState _state
     + void ChangeState(BaseState)
     + bool DeviceConnected()
@@ -19,7 +20,8 @@ class ChargeControl{
 class BaseState{
     + enum StateID StateId
     + string DisplayMessage
-    + void MonitorCurrentEvent(double current)
+    # void MonitorCurrentEvent(double current)
+    + void StopCharge()
 
 }
 
@@ -33,12 +35,32 @@ interface IDisplay{
     SetChargingMessage(string msg)
 }
 
-StateID <-- ChargeControl
-StationControl --> ChargeControl
+interface IStationControl{
+    + void OnChargingError()
+}
+
+interface IChargeControl{
+
+}
+
+class StateCharging{
+    # override void MonitorCurrentEvent(double)
+}
+
+class StateFullyCharged{
+    # override void MonitorCurrentEvent(double)
+}
+
+IStationControl --> ChargeControl
 ChargeControl --> IDisplay
 ChargeControl --> IUSBCharger
+ChargeControl --|> IChargeControl
 BaseState --* ChargeControl
-BaseState --> StateID
+BaseState <|-- StateCharging
+BaseState <|-- StateError
+BaseState <|-- StateReady
+BaseState <|-- StateFullyCharged
+ChargeControl --> StateReady
 
 
 @enduml

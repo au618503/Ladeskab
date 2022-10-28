@@ -26,8 +26,6 @@ public class StateBase
     public void StopCharge()
     {
         Charger.StopCharge();
-        // Makes sure if a task is running, it is stopped
         Charging = false;
     }
-    public virtual void OnEnter() { }
 }
