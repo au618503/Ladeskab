@@ -79,7 +79,11 @@ namespace Cabinet_Library_StationControl
             _door = door;
             _state = new AvailableState(this, _chargeControl, _display, _door, null);
         }
-        
+
+        public StationStateBase GetState()
+        {
+            return _state;
+        }
         public void ChangeState(StationStateBase state)
         {
             _state = state;

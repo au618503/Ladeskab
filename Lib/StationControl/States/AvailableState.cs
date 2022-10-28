@@ -12,9 +12,13 @@ namespace Cabinet_Library.StationControl.States
     public class AvailableState : StationStateBase
     {
         StationStateID stateId = StationStateID.AVAILABLE;
-        
-        public AvailableState(IStationControl context, IChargeControl chargeControl, IDisplay display, IDoor door, int? savedId)
-            : base(context, chargeControl, display, door, savedId){}
+
+        public AvailableState(IStationControl context, IChargeControl chargeControl, IDisplay display, IDoor door,
+            int? savedId)
+            : base(context, chargeControl, display, door, savedId)
+        {
+            StateID = stateId;
+        }
 
         public override void OnDoorOpened()
         {

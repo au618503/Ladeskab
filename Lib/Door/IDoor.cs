@@ -13,6 +13,7 @@ namespace Cabinet_Library.Door
 
         // Direct access to the door status
         bool DoorIsOpen { get; }
+        bool DoorIsLocked { get; }
 
         void LockDoor();
         void UnlockDoor();

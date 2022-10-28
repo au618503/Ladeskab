@@ -12,6 +12,7 @@ public class DoorOpenedState : StationStateBase
     public DoorOpenedState(IStationControl context, IChargeControl chargeControl, IDisplay display, IDoor door, int? savedId) 
         : base(context, chargeControl, display, door, savedId)
     {
+        StateID = stateId;
         Display.Show(TextEnter);
     }
 

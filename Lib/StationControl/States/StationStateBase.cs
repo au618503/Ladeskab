@@ -12,12 +12,16 @@ namespace Cabinet_Library.StationControl.States
 {
     public class StationStateBase
     {
-        public readonly StationStateID StateID;
+        public StationStateID StateID;
         protected IStationControl Context;
         protected IChargeControl ChargeControl;
         protected IDisplay Display;
         protected IDoor Door;
-        protected int? SavedId = null;
+        public int? SavedId
+        {
+            get;
+            protected set;
+        }
         public virtual void OnDoorOpened() { }
         public virtual void OnDoorClosed() { }
         public virtual void OnRfidDetected(int id) { }
