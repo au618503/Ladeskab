@@ -13,5 +13,4 @@ public class StateError : StateBase
         Charging = false;
         DisplayMessage = Message;
     }
-
 }

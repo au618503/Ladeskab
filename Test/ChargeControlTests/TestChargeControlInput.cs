@@ -7,6 +7,7 @@ using Cabinet_Library.ChargeControl;
 using Cabinet_Library.ChargeControl.States;
 using Cabinet_Library.Display;
 using Cabinet_Library.StationControl;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Interfaces;
 using NSubstitute;
 
 namespace UnitTests.ChargeControlTests
@@ -17,6 +18,7 @@ namespace UnitTests.ChargeControlTests
         private IStationControl _stationControl = Substitute.For<IStationControl>();
         private IUsbCharger _usbCharger;
         private ChargeControl _uut;
+
         [SetUp]
         public void Setup()
         {
@@ -136,6 +138,52 @@ namespace UnitTests.ChargeControlTests
             _usbCharger.Connected.Returns(true);
             _uut.StartCharge();
             _usbCharger.Received().StartCharge();
+        }
+
+        // Test Reset()
+        [Test]
+        public void TestCharging_ResetToReady()
+        {
+            _usbCharger.Connected.Returns(false);
+            _uut.StartCharge();
+            _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 530 });
+            Assert.That(_uut.GetState(), Is.EqualTo(StateID.ERROR));
+            _uut.Reset();
+            Assert.That(_uut.GetState(), Is.EqualTo(StateID.READY));
+        }
+
+
+        // Test GetCharger()
+        [Test]
+        public void TestCharging_GetCharger()
+        {
+
+        }
+
+
+        [Test]
+        public void TestCharging_OnError()
+        {
+
+        }
+
+        [Test]
+        public void TestCharging_DeviceConnected()
+        {
+            _usbCharger.Connected.Returns(true);
+            Assert.IsTrue(_uut.DeviceConnected());
+        }
+
+        [Test]
+        public void TestCharging_OnCurrentEvent()
+        {
+
+        }
+
+        [Test]
+        public void TestCharging_ChangeState()
+        {
+
         }
     }
 }

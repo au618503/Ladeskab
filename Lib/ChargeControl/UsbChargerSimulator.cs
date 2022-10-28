@@ -117,7 +117,7 @@ namespace Cabinet_Library.ChargeControl
 
             _charging = false;
         }
-
+        
         private void OnNewCurrent()
         {
             CurrentValueEvent?.Invoke(this, new CurrentEventArgs() { Current = CurrentValue });

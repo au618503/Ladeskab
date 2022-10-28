@@ -25,5 +25,6 @@ namespace Cabinet_Library.ChargeControl
         void StartCharge();
         // Stop charging
         void StopCharge();
+
     }
 }
