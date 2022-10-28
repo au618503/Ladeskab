@@ -47,9 +47,9 @@ namespace UnitTests.StationControlTests
         {
             //Setup the stub with resired response
             _door.DoorEvent += Raise.EventWith(new DoorEventArgs() { IsOpen =  true});
-
+            _door.DoorIsOpen = true;
             //assert that doorOpen is called correct
-            Assert.That(_door.DoorIsOpen, Is.EqualTo(true));
+            Assert.That(_door.DoorIsOpen, Is.EqualTo(DoorOpenedState));
         }
         [Test]
         public void TestStationControl_DoorOpen_false()
@@ -65,7 +65,7 @@ namespace UnitTests.StationControlTests
         [Test]
         public void TestStationControl_RFIDDetected()
         {
-            _rfid.RfidEvent += Raise.EventWith(new RfidEventArgs { Rfid = 1 });
+            _rfid.RfidEvent += Raise.EventWith(new RfidEventArgs { rfid = 1 });
 
             Assert.That(_rfidReader, Is.EqualTo(_rfid));
         }
