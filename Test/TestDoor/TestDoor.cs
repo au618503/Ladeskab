@@ -13,6 +13,11 @@ namespace UnitTests.TestDoor
         private Door _uut;
         private DoorEventArgs _recievedEvent;
 
+        /// <summary>
+        /// Test conditions: default door settings
+        /// DoorOpened = false
+        /// DoorLocked = false
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -24,7 +29,7 @@ namespace UnitTests.TestDoor
         
         
         [Test]
-        public void DoorIsLocked() 
+        public void DoorClosed_DoorIsLocked() 
             
         {
             _uut.LockDoor();
@@ -80,21 +85,26 @@ namespace UnitTests.TestDoor
 
 
         [Test]
-        public void DoorIsUnlockedAndClosed()
+        public void Door_UnlockDoor_IsUnlocked()
         {
             _uut.UnlockDoor();
-            _uut.SimulateDoorClosed();
-            Assert.That(_uut.DoorIsLocked, Is.True);
-            Assert.That(_uut.SimulateDoorClosed, Is.True);
+            Assert.That(_uut.DoorIsLocked, Is.False);
+        }
+
+        [Test]
+        public void DoorLocked_OpenDoorFails()
+        {
+            _uut.LockDoor();
+            _uut.SimulateDoorOpened();
+            Assert.IsFalse(_uut.DoorIsOpen);
         }
 
         [Test]
         public void DoorIsLockedAndClosedAgain()
         {
-            _uut.LockDoor();
             _uut.SimulateDoorClosed();
+            _uut.LockDoor();
             Assert.That(_uut.DoorIsLocked, Is.True);
-            Assert.That(_uut.SimulateDoorClosed, Is.True);
         }
     }
 }

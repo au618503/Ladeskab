@@ -44,7 +44,6 @@ namespace UnitTests.StationControlTests
             _rfidReader = Substitute.For<IRfIdReader>();
             _logFile = Substitute.For<ILogger>();
             _uut = new StationControl(_door, _display, _chargeControl, _rfidReader, _logFile);
-
         }
         [Test]
         public void DefaultStateIsAvailable()

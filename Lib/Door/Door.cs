@@ -15,7 +15,7 @@ namespace Cabinet_Library.Door
         public bool DoorIsLocked { get; private set; }
         public Door()
         {
-            DoorIsOpen = true;
+            DoorIsOpen = false;
             DoorIsLocked = false;
         }
 
