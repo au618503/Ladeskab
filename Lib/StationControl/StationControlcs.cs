@@ -79,7 +79,7 @@ namespace Cabinet_Library_StationControl
             _door = door;
             _state = new AvailableState(this, _chargeControl, _display, _door, null);
         }
-
+        
         public void ChangeState(StationStateBase state)
         {
             _state = state;
@@ -88,6 +88,7 @@ namespace Cabinet_Library_StationControl
         public void LogDoorLocked(int id)
         {
             _logFile.LogDoorLocked(id);
+            
         }
         public void LogDoorUnlocked(int id)
         {

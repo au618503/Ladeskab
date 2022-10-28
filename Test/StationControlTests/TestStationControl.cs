@@ -24,9 +24,10 @@ namespace UnitTests.StationControlTests
         private IDoor _door;
         private IChargeControl _chargeControl;
         private IDisplay _display;
-        private ILogger? _logFile;
+        private ILogger _logFile;
         private IRfIdReader _rfidReader;
         private IRfIdReader _rfid;
+        private StationStateBase _state;
 
 
         [SetUp]
@@ -34,48 +35,86 @@ namespace UnitTests.StationControlTests
         public void Setup()
         {
             _door = Substitute.For<IDoor>();
-            _chargeControl = Substitute.For<IChargeControl>();
+           // _chargeControl = Substitute.For<IChargeControl>();
             _display = Substitute.For<IDisplay>();
             _rfidReader = Substitute.For<IRfIdReader>();
+            _state = Substitute.For<StationStateBase>();
             _uut = new StationControl(_door, _display, _chargeControl, _rfidReader, _logFile);
 
         }
-        #region TestDoor
+        [Test]
+        public void TestChangeState(StationStateBase state)
+        {
+
+            _uut.ChangeState(state);
+            _uut.
+            Assert.That(_uut.StationStateID, Is.EqualTo(state));
+            
+        }
+
+        [Test]
+        publikc private void TestLogDoor()
+        {
+            TestLogDoor(_logFile);
+        }
+
+        void TestLogDoor(ILogger _logFile)
+        {
+            _uut.LogDoorLocked(1);
+            _logFile.Received().LogDoorLocked(1);
+            Assert.That(_uut.LogDoorLocked(1), Is.EqualTo(_logFile.LogDoorLocked(1)));
+        }
+
+        [Test]
+        public void TestLogDoorUnlocked()
+        {
+            _uut.LogDoorUnlocked(1);
+            _logFile.Received().LogDoorUnlocked(1);
+            Assert.That(_uut.LogDoorUnlocked(1), Is.EqualTo(_logFile.LogDoorUnlocked(1)));
+        }
+
+        
+
+        //#region TestDoor
+        ////[Test]
+        //// ACT and ASSERT
+        ////public void TestStationControl_DoorOpen_true()
+        ////{
+
+        ////    //Setup the stub with resired response
+        ////    _door.DoorEvent += Raise.EventWith(new DoorEventArgs() { IsOpen =  true});
+
+        ////    //_door.DoorIsOpen = true;
+        ////    //_door.DoorEvent.Invoke(this, new DoorEventArgs() { IsOpen = DoorIsOpen });
+
+        ////    //_door.DoorIsOpen = true;
+
+        ////    ////assert that doorOpen is called correct
+        ////    Assert.That(_uut., Is.EqualTo(true));
+        ////}
         //[Test]
-        // ACT and ASSERT
-        //public void TestStationControl_DoorOpen_true()
-        //{
-            
-        //    //Setup the stub with resired response
-        //    _door.DoorEvent += Raise.EventWith(new DoorEventArgs() { IsOpen =  true});
-
-        //    //_door.DoorIsOpen = true;
-        //    //_door.DoorEvent.Invoke(this, new DoorEventArgs() { IsOpen = DoorIsOpen });
-
-        //    //_door.DoorIsOpen = true;
-            
-        //    ////assert that doorOpen is called correct
-        //    Assert.That(_uut., Is.EqualTo(true));
-        //}
-        [Test]
         //PASSED
-        public void TestStationControl_DoorOpen_true()
-        {
-            _door.DoorEvent += Raise.EventWith(new DoorEventArgs() { IsOpen = true });
+        //public void TestStationControl_LogDoorLocked()
+        //{
+        //   // _door.DoorEvent += Raise.EventWith(new DoorEventArgs());
+        //    DoorEventArgs testargs = new LogEventArgs() { IsOpen = true };
 
-            Assert.That(_door.DoorIsOpen, Is.EqualTo(true));
-        }
+        //    _door.DoorEvent += Raise.EventWith(testargs);
+        //    testargs.IsOpen = true;
 
-        #endregion
+        //    Assert.That(actual: _uut., Is.EqualTo(,IsOpen));
+        //}
+
+        //#endregion
 
 
-        [Test]
-        public void TestStationControl_RFIDDetected()
-        {
-            _rfid.RfidEvent += Raise.EventWith(new RfidEventArgs { Rfid = 1 });
+        //[Test]
+        //public void TestStationControl_RFIDDetected()
+        //{
+        //    _rfid.RfidEvent += Raise.EventWith(new RfidEventArgs { Rfid = 1 });
 
-            Assert.That(_rfidReader, Is.EqualTo(_rfid));
-        }
+        //    Assert.That(_rfidReader, Is.EqualTo(_rfid));
+        //}
 
 
 
