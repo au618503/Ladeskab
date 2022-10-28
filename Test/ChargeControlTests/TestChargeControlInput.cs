@@ -103,7 +103,7 @@ namespace UnitTests.ChargeControlTests
             _display.Received().SetChargingText("");
         }
 
-        // Test of StopCharge()
+        // Test StopCharge()
         [Test]
         public void TestCharging_NotDoneCharging_UsbChargerNotStopped()
         {
@@ -131,7 +131,7 @@ namespace UnitTests.ChargeControlTests
             _usbCharger.Received().StopCharge();
         }
 
-        // Test af StartCharge()
+        // Test StartCharge()
         [Test]
         public void TestCharging_UsbChargerStarted()
         {
@@ -157,15 +157,17 @@ namespace UnitTests.ChargeControlTests
         [Test]
         public void TestCharging_GetCharger()
         {
-
+            Assert.IsTrue(_uut.GetCharger()==_usbCharger);
         }
 
 
-        [Test]
+       /* [Test]
         public void TestCharging_OnError()
         {
+            _uut.OnError(700);
+            _stationControl.ReceivedWithAnyArgs().OnChargerError(_uut,new ChargingEventArgs(){Current=700});
 
-        }
+        }*/
 
         [Test]
         public void TestCharging_DeviceConnected()
@@ -173,17 +175,15 @@ namespace UnitTests.ChargeControlTests
             _usbCharger.Connected.Returns(true);
             Assert.IsTrue(_uut.DeviceConnected());
         }
-
+        
         [Test]
-        public void TestCharging_OnCurrentEvent()
+        public void TestCharging_StartChargeReceived0ChangeStateToFullyCharged()
         {
-
-        }
-
-        [Test]
-        public void TestCharging_ChangeState()
-        {
-
+            _usbCharger.Connected.Returns(true);
+            _uut.StartCharge();
+            Assert.That(_uut.GetState(), Is.EqualTo(StateID.CHARGING));
+            _usbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs() { Current = 0 });
+            Assert.That(_uut.GetState(), Is.EqualTo(StateID.FULLY_CHARGED));
         }
     }
 }
