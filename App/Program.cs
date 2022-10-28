@@ -58,7 +58,7 @@ class Program
                 ui.Connected = "False";
             }
 
-            ui.DisplayUI(display.Show, phone.BatteryLevel);
+            ui.DisplayUI(display, phone.BatteryLevel);
             //display.Show("Charger state: "+ chargeControl.GetState().ToString());
             if (Console.KeyAvailable)
             {
