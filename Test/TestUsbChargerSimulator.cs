@@ -17,10 +17,11 @@ namespace UnitTests
         public void Setup()
         {
             _uut = new UsbChargerSimulator();
+            _uut.SimulateConnected(true);
         }
 
         [Test]
-        public void ctor_IsConnected()
+        public void ctor_IsNotConnected()
         {
             Assert.That(_uut.Connected, Is.True);
         }
@@ -147,7 +148,7 @@ namespace UnitTests
         public void SimulateOverload_Start_ReceivesHighValueImmediately()
         {
             double lastValue = 0;
-
+            
             _uut.CurrentValueEvent += (o, args) =>
             {
                 lastValue = args.Current;

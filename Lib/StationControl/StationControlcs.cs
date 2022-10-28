@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -6,141 +6,115 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cabinet_Library.ChargeControl;
+using Cabinet_Library;
+using System.Runtime.InteropServices;
+using Cabinet_Library.ChargeControl.States;
+using Cabinet_Library.Display;
+using Cabinet_Library.Door;
+using Cabinet_Library.StationControl;
+using Cabinet_Library.StationControl.States;
+using Cabinet_Library.Logger;
+using Cabinet_Library.RfIdReader;
 
-//using Ladeskab.Interfaces;
-
-namespace Cabinet_Library.StationControl
+namespace Cabinet_Library_StationControl
 {
-    public class StationControl
+    public class StationControl : IStationControl
     {
-        // Enum med tilstande ("states") svarende til tilstandsdiagrammet for klassen
-        private enum LadeskabState
-        {
-            Available,
-            Locked,
-            DoorOpen
-        };
-
-        // Her mangler flere member variable
-        private LadeskabState _state;
-        //private IChargeControl _charger;
-        private IUsbCharger _charger;
-        private int _oldId;
         private IDoor _door;
-        private Display.Display _display;
-        private IRfid _rfid;
-        private ChargeControl.ChargeControl _chargeControl;
+        private IDisplay _display;
+        private IChargeControl _chargeControl;
+       // private IRfIdReader _rfid;
+        private ILogger _logFile;
+        private StationStateBase _state;
 
-        private string logFile = "logfile.txt"; // Navnet på systemets log-fil
+        #region EventHandlers
 
-        // Her mangler constructor
-        public StationControl(IDoor door, IUsbCharger charger, IRfid rfid)
+        //events for door and rdif
+
+        public void OnRfidEvent(object? sender, RfidEventArgs args)
         {
-            _display = new Display.Display();
-
-            _door = door;
-            _door.DoorEvent += HandleDoor;
-
-            _charger = charger;
-            //_charger.CurrentValueEvent += HandleChargeCurrent;
-
-            _rfid = rfid;
-            _rfid.RfidEvent += HandleRfidDetected;
+            int id = args.Rfid;
+            _state.OnRfidDetected(id);
         }
 
-        public void OnChargingStateChanged(object? sender, ChargingEventArgs args)
+        public void OnDoorEvent(object? sender, DoorEventArgs args)
         {
-            Console.WriteLine("Charging state changed: " + args.Id + "\nDisplay message: " + args.Message);
-        }
-        private void HandleDoor(object sender, DoorEventArgs e)
-        {
-            switch (_state)
+            if (args.IsOpen)
             {
-                case LadeskabState.Available:
-                    if (e.IsOpen && !e.IsLocked)
-                    {
-                        _display.Show("Tilslut telefon");
-                        _state = LadeskabState.DoorOpen;
-                    }
-                    break;
-                case LadeskabState.DoorOpen:
-                    if (!e.IsOpen && !e.IsLocked)
-                    {
-                        _display.Show("Indlæs RFID");
-                        _state = LadeskabState.Available;
-                    }
-                    break;
-                default:
-                    // do nothing
-                    break;
+                _state.OnDoorOpened();
+            }
+            else
+            {
+                _state.OnDoorClosed();
             }
         }
+
+        public void OnChargerError(object? sender, ChargingEventArgs args)
+        {
+            _display.SetMainText($"Error, current too high ({args.Current})\n Reset system.");
+            _logFile.LogChargingError(args.Current);
+        }
+
+        #endregion
+
         
-
-        private void HandleRfidDetected(object sender, RfidEventArgs e)
+        public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl, IRfIdReader rfidReader,
+            ILogger logFile)
         {
-            RfidDetected(e.Rfid);
+            rfidReader.RfidEvent += OnRfidEvent;
+            _door = door;
+            _door.DoorEvent += OnDoorEvent;
+            _display = display;
+            _chargeControl = chargeControl;
+            _chargeControl.ErrorEvent += OnChargerError;
+            _logFile = logFile;
+            _state = new AvailableState(this, _chargeControl, _display, _door, null);
+
         }
 
-        // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
-
-        private void RfidDetected(int id)
+        public StationControl(IChargeControl chargeControl, IDisplay display, IDoor door, IStationControl stationControl)
         {
-            switch (_state)
-            {
-                case LadeskabState.Available:
-                    // Check for ladeforbindelse
-                    if (_charger.Connected)
-                    {
-                        _door.LockDoor();
-                        _charger.StartCharge();
-                        _oldId = id;
-                        using (var writer = File.AppendText(logFile))
-                        {
-                            writer.WriteLine(DateTime.Now + ": Skab låst med RFID: {0}", id);
-                        }
-
-                        Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
-                        _display.Show("Ladeskab optaget");
-                        _state = LadeskabState.Locked;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
-                        _display.Show("Tilslutningsfejl");
-                    }
-
-                    break;
-
-                case LadeskabState.DoorOpen:
-                    // Ignore
-                    break;
-
-                case LadeskabState.Locked:
-                    // Check for correct ID
-                    if (id == _oldId)
-                    {
-                        _charger.StopCharge();
-                        _door.UnlockDoor();
-                        using (var writer = File.AppendText(logFile))
-                        {
-                            writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
-                        }
-
-                        Console.WriteLine("Tag din telefon ud af skabet og luk døren");
-                        _display.Show("Fjern telefon");
-                        _state = LadeskabState.Available;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Forkert RFID tag");
-                        _display.Show("RFID fejl");
-                    }
-
-                    break;
-            }
+            _chargeControl = chargeControl;
+            _display = display;
+            _door = door;
+            _state = new AvailableState(this, _chargeControl, _display, _door, null);
         }
 
-        // Her mangler de andre trigger handlere
+        public StationStateBase GetState()
+        {
+            return _state;
+        }
+        public void ChangeState(StationStateBase state)
+        {
+            _state = state;
+        }
+
+        public void LogDoorLocked(int id)
+        {
+            _logFile.LogDoorLocked(id);
+            
+        }
+        public void LogDoorUnlocked(int id)
+        {
+            _logFile.LogDoorUnlocked(id);
+        }
+
+        public void Reset()
+        {
+            _chargeControl.StopCharge();
+            _chargeControl.Reset();
+            _display.SetMainText("Welcome to Chargebinet 1.027. Open the door and follow the instructions!");
+            _door.UnlockDoor();
+            ChangeState(new AvailableState(this, _chargeControl, _display, _door, null));
+        }
+
+        public void ChargingFinished()
+        {
+            _chargeControl.StopCharge();
+            ChangeState(new AvailableState(this, _chargeControl, _display, _door, null));
+            _chargeControl.ChangeState(new StateReady(_chargeControl.GetCharger(), _chargeControl));
+        }
     }
 }
+
+

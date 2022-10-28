@@ -2,7 +2,8 @@
 
 public interface IDisplay
 {
-    public string _chargingText { get;}
-    public string _stateText { get;}
+    public void Show();
+
+    public void SetMainText(string text);
     public void SetChargingText(string chargingText);
 }

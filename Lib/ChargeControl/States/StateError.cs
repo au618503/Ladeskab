@@ -5,10 +5,12 @@ public class StateError : StateBase
 {
     private const StateID Id = StateID.ERROR;
     private const string Message = "Charging error. Contact support.";
-    public StateError(ChargeControl context) : base(null, context, Id)
+    public double LoggedCurrentValue { get;}
+    public StateError(IUsbCharger charger, IChargeControl context, double loggedCurrentValue) : base(charger, context, Id)
     {
+        LoggedCurrentValue = loggedCurrentValue;
+        Context.OnError(LoggedCurrentValue);
         Charging = false;
         DisplayMessage = Message;
     }
-
 }

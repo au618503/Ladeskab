@@ -1,0 +1,74 @@
+@startuml StationControl_cd
+
+class StationControl{
+    - IDisplay _display
+    - ILogger _logger
+    - IUsbCharger _charger
+    - IDoor _door
+    - StationStateBase _state
+    --
+    // event callbacks
+    + void OnError(object, ChargingEventArgs)
+    + void OnRfidEvent(object, RfidEventArgs)
+    + void OnDoorEvent(object, DoorEventArgs)
+    --
+    + void ChangeState(StationBaseState)
+    + void OnChargeFinished()
+}
+
+class StationStateBase{
+    + StationStateId StateId
+    + int? SavedId
+    # IStationControl Context
+    # IChargeControl Charger
+    # IDisplay Display
+    # IDoor Door
+    --
+    # virtual void OnDoorOpened()
+    # virtual void OnDoorClosed()
+    # virtual void OnRfidDetected(int id)
+}
+
+class DoorOpenedState{
+    # override void OnDoorClosed()
+}
+
+class AvailableState{
+    # override void OnDoorOpened()
+    # override void OnRfidDetected()
+}
+class OccupiedState{
+    # override void OnRfidDetected()
+}
+
+interface IDoor{
+    + void LockDoor()
+    + void UnlockDoor()
+}
+
+interface IDisplay{
+    + void SetMainText(string text)
+}
+
+interface IChargeControl{
+    + void StartCharge()
+    + void StopCharge()
+}
+
+interface ILogger{
+    + void LogDoorLocked()
+    + void LogError(double current)
+    + void LogDoorUnlocked()
+}
+
+StationControl --|> IStationControl
+StationControl --> StationStateBase
+AvailableState --|> StationStateBase
+AvailableState <-- StationControl
+OccupiedState --|> StationStateBase
+DoorOpenedState --|> StationStateBase
+StationControl --> IDisplay
+StationControl --> IDoor
+StationControl --> IChargeControl
+StationControl --> ILogger
+@enduml
