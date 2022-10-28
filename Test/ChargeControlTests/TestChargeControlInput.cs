@@ -64,7 +64,7 @@ namespace UnitTests.ChargeControlTests
             _usbCharger.CurrentValueEvent += Raise.EventWith(testargs);
             _display.Received().SetChargingText("Charging error. Contact support.");
         }
-        
+
         [Test]
         public void TestCharging_StateIsFullyCharged()
         {

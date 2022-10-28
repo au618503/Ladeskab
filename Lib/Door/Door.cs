@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using static Cabinet_Library.Door.Door;
 
 
@@ -15,7 +15,7 @@ namespace Cabinet_Library.Door
         public bool DoorIsLocked { get; private set; }
         public Door()
         {
-            DoorIsOpen = false;
+            DoorIsOpen = true;
             DoorIsLocked = false;
         }
 
@@ -55,7 +55,6 @@ namespace Cabinet_Library.Door
                 DoorIsLocked = false;
             }
         }
-
-   
     }
+    
 }

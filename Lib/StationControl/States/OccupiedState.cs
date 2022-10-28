@@ -11,7 +11,10 @@ public class OccupiedState : StationStateBase
 
     public OccupiedState(IStationControl context, IChargeControl chargeControl, IDisplay display, IDoor door,
         int? savedId)
-        : base(context, chargeControl, display, door, savedId) {}
+        : base(context, chargeControl, display, door, savedId)
+    {
+        StateID = stateId;
+    }
 
     public override void OnRfidDetected(int id)
     {
