@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Cabinet_Library.ChargeControl;
 using Cabinet_Library;
 using System.Runtime.InteropServices;
+using Cabinet_Library.ChargeControl.States;
 using Cabinet_Library.ObserverPattern;
 using Cabinet_Library.Display;
 using Cabinet_Library.Door;
@@ -51,13 +52,13 @@ namespace Cabinet_Library_StationControl
 
         public void OnChargerError(object? sender, ChargingEventArgs args)
         {
-            _display.Show($"Error, current too high ({args.Current})");
+            _display.SetMainText($"Error, current too high ({args.Current})\n Reset system.");
             _logFile.LogChargingError(args.Current);
         }
 
         #endregion
 
-
+        
         public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl, IRfIdReader rfidReader,
             ILogger logFile)
         {
@@ -97,6 +98,22 @@ namespace Cabinet_Library_StationControl
         public void LogDoorUnlocked(int id)
         {
             _logFile.LogDoorUnlocked(id);
+        }
+
+        public void Reset()
+        {
+            _chargeControl.StopCharge();
+            _chargeControl.Reset();
+            _display.SetMainText("Welcome to Chargebinet 1.027. Open the door and follow the instructions!");
+            _door.UnlockDoor();
+            ChangeState(new AvailableState(this, _chargeControl, _display, _door, null));
+        }
+
+        public void ChargingFinished()
+        {
+            _chargeControl.StopCharge();
+            ChangeState(new AvailableState(this, _chargeControl, _display, _door, null));
+            _chargeControl.ChangeState(new StateReady(_chargeControl.GetCharger(), _chargeControl));
         }
     }
 }

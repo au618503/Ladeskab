@@ -7,7 +7,7 @@ public class StateReady : StateBase
 {
     public const StateID Id = StateID.READY;
     private const string Message = "";
-    public StateReady(IUsbCharger charger, ChargeControl context) : base(charger, context, Id)
+    public StateReady(IUsbCharger charger, IChargeControl context) : base(charger, context, Id)
     {
         Charging = false;
         DisplayMessage = Message;

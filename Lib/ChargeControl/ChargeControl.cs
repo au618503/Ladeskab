@@ -57,12 +57,23 @@ namespace Cabinet_Library.ChargeControl
 
         public void OnError(double current)
         {
-            ErrorEvent.Invoke(this, new ChargingEventArgs(){Current = current});
+            ErrorEvent?.Invoke(this, new ChargingEventArgs(){Current = current});
         }
 
         public StateID GetState()
         {
             return _state.StateId;
+        }
+
+        // Reset the charger after an error has occured
+        public void Reset()
+        {
+            ChangeState(new StateReady(_charger, this));
+        }
+
+        public IUsbCharger GetCharger()
+        {
+            return _charger;
         }
     }
 }

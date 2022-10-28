@@ -34,12 +34,5 @@ namespace Cabinet_Library.StationControl.States
             Door = door;
             SavedId = savedId;
         }
-
-        
-
-
-
-        //         . Systemet aflæser RFID - tagget.Hvis RFID er identisk med det, der blev brugt til at låse skabet med, stoppes opladning, ladeskabets låge låses op og oplåsningen logges.
-//9.Brugeren åbner ladeskabet, fjerner ladekablet fra sin telefon og tager telefonen
     }
 }

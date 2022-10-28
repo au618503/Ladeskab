@@ -28,7 +28,7 @@ namespace Cabinet_Library.StationControl.States
         {
             if (!ChargeControl.DeviceConnected())
             {
-                Display.Show("Connection error. Connect your phone.");
+                Display.SetMainText("Connection error. Connect your phone.");
             }
             else
             {
@@ -36,7 +36,7 @@ namespace Cabinet_Library.StationControl.States
                 Door.LockDoor();
                 ChargeControl.StartCharge();
                 Context.LogDoorLocked(id);
-                Display.Show("Charging Cabinet Occupied");
+                Display.SetMainText("Charging Cabinet Occupied");
                 Context.ChangeState(new OccupiedState(Context, ChargeControl, Display, Door, SavedId));
             }
         }

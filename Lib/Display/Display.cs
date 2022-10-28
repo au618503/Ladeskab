@@ -4,20 +4,25 @@ namespace Cabinet_Library.Display
 {
     public class Display : IDisplay
     {
-        private string _chargingText = "";
+        public string ChargingText = "";
+        public string MainText = "";
 
-        public void Show(string Text)
+        public void Show()
         {
-            Console.WriteLine(Text);
+            Console.WriteLine(MainText);
             Console.Write("\n");
-            Console.WriteLine(_chargingText);
+            Console.WriteLine(ChargingText);
         }
 
+        public void SetMainText(string text)
+        {
+            MainText = text;
+        }
         // Used by ChargeControl. Display needs to display both charge info (if any) and 
         // StationControl info
         public void SetChargingText(string text)
         {
-            _chargingText = text;
+            ChargingText = text;
         }
     }
 }

@@ -19,9 +19,12 @@ namespace Cabinet_Library.ChargeControl
         // Require connection status of the phone
         bool Connected { get; }
 
+        void OnPhoneFullyCharged();
+
         // Start charging
         void StartCharge();
         // Stop charging
         void StopCharge();
+
     }
 }
