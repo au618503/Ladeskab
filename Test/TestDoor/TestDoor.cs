@@ -11,7 +11,7 @@ namespace UnitTests.TestDoor
     internal class TestDoor
     {
         private Door _uut;
-        private DoorEventArgs _recievedEvent;
+        private DoorEventArgs _recievedEventArgs;
 
         /// <summary>
         /// Test conditions: default door settings
@@ -21,13 +21,25 @@ namespace UnitTests.TestDoor
         [SetUp]
         public void Setup()
         {
-            _recievedEvent = Substitute.For<DoorEventArgs>();
             _uut = new Door();
-            _uut.DoorEvent += (o, args) => { _recievedEvent = args; };
+            _uut.DoorEvent += (o, args) => { _recievedEventArgs = args; };
         }
 
-        
-        
+        // Test events raised correctly
+        [Test]
+        public void DoorEventRaisedwTrue_ArgsCorrect()
+        {
+            _uut.SimulateDoorOpened();
+            Assert.IsTrue(_recievedEventArgs.IsOpen);
+        }
+        [Test]
+        public void DoorEventRaisedwFalse_ArgsCorrect()
+        {
+            _uut.SimulateDoorOpened();
+            _uut.SimulateDoorClosed();
+            Assert.IsTrue(!_recievedEventArgs.IsOpen);
+        }
+
         [Test]
         public void DoorClosed_DoorIsLocked() 
             
@@ -39,32 +51,33 @@ namespace UnitTests.TestDoor
         [Test]
         public void DoorIsClosed()
         {
-          
             _uut.SimulateDoorClosed();
-            Assert.That(_uut.DoorIsLocked, Is.False);
+            Assert.That(_uut.DoorIsOpen, Is.False);
         }
 
         [Test]
-        public void DoorIsUnlocked()
+        public void LockDoor_IsLocked()
         {
-            _uut.UnlockDoor();
-            Assert.That(_uut.DoorIsLocked, Is.False);
-        }
-
-        [Test]
-        public void DoorIsOpen()
-        {
-            _uut.SimulateDoorOpened();
-            Assert.That(_uut.DoorIsLocked, Is.False);
-        }
-
-        [Test]
-        public void DoorIsLockedAgain()
-        {
-            _uut.UnlockDoor();
+            _uut.SimulateDoorClosed();
             _uut.LockDoor();
             Assert.That(_uut.DoorIsLocked, Is.True);
         }
+
+        [Test]
+        public void DoorUnlock_IsUnlocked()
+        {
+            _uut.UnlockDoor();
+            Assert.That(_uut.DoorIsLocked, Is.False);
+        }
+
+        [Test]
+        public void DoorOpened_DoorIsNotLocked()
+        {
+            _uut.UnlockDoor();
+            _uut.SimulateDoorOpened();
+            Assert.That(_uut.DoorIsOpen, Is.True);
+        }
+
 
         [Test]
         public void DoorIsClosedAgain()
