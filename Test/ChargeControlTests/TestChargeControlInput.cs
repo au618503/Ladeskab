@@ -18,6 +18,7 @@ namespace UnitTests.ChargeControlTests
         private IStationControl _stationControl = Substitute.For<IStationControl>();
         private IUsbCharger _usbCharger;
         private ChargeControl _uut;
+        private ChargingEventArgs _args;
 
         [SetUp]
         public void Setup()
@@ -161,13 +162,16 @@ namespace UnitTests.ChargeControlTests
         }
 
 
-       /* [Test]
-        public void TestCharging_OnError()
+        [Test]
+        public void TestCharging_OnErrorSendsErrorEvent()
         {
+            _uut.ErrorEvent += (o, a) =>
+            {
+                _args = a;
+            };
             _uut.OnError(700);
-            _stationControl.ReceivedWithAnyArgs().OnChargerError(_uut,new ChargingEventArgs(){Current=700});
-
-        }*/
+            Assert.IsTrue(_args.Current == 700);
+        }
 
         [Test]
         public void TestCharging_DeviceConnected()

@@ -2,10 +2,8 @@
 
 namespace Cabinet_Library.ChargeControl;
 
-public class ChargingEventArgs
+public class ChargingEventArgs : EventArgs
 {
     // Can add error message if more errors are introduced
-    public StateID? Id { get; set; }
-    public string? Message { get; set; }
     public double Current { get; set; }
 }
